@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alur Pengguna EcoGrow LMS</title>
+    <style>
+      :root {
+        --leaf-900: #062a16;
+        --leaf-800: #0b4f2a;
+        --leaf-700: #167a3a;
+        --leaf-100: #dff5e6;
+        --cream: #fff8e7;
+        --sun: #f6c343;
+        --sky: #38bdf8;
+        --earth: #9a6b3f;
+        --ink: #183227;
+        --muted: #5f716a;
+        --line: #d7e6da;
+        --paper: #fbf8ed;
+        --white: #ffffff;
+        --shadow: 0 24px 70px rgba(6, 42, 22, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background:
+          radial-gradient(circle at 10% 4%, rgba(246, 195, 67, 0.2), transparent 24rem),
+          radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.14), transparent 26rem),
+          linear-gradient(180deg, #f7fbf3 0%, #fffaf0 48%, #f2f9ef 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 64px;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.36);
+        border-radius: 36px;
+        padding: clamp(28px, 5vw, 58px);
+        color: var(--white);
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 36%),
+          linear-gradient(115deg, #062a16 0%, #0b4f2a 58%, #17683a 100%);
+        box-shadow: var(--shadow);
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .hero::before {
+        right: -7rem;
+        top: -7rem;
+        width: 20rem;
+        height: 20rem;
+        background: radial-gradient(circle, rgba(246, 195, 67, 0.38), transparent 68%);
+      }
+
+      .hero::after {
+        left: -6rem;
+        bottom: -9rem;
+        width: 24rem;
+        height: 24rem;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 999px;
+        padding: 9px 14px;
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--sun);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        position: relative;
+        z-index: 1;
+        max-width: 920px;
+        margin: 22px 0 0;
+        font-size: clamp(38px, 7vw, 82px);
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+      }
+
+      .hero p {
+        position: relative;
+        z-index: 1;
+        max-width: 790px;
+        margin: 22px 0 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 17px;
+        font-weight: 650;
+        line-height: 1.8;
+      }
+
+      .hero-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 32px;
+      }
+
+      .hero-stat {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 22px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-stat strong {
+        display: block;
+        color: var(--sun);
+        font-size: 24px;
+      }
+
+      .hero-stat span {
+        display: block;
+        margin-top: 6px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.5;
+        text-transform: uppercase;
+      }
+
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 22px 0 30px;
+      }
+
+      .toc a {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--leaf-800);
+        font-size: 13px;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 10px 24px rgba(6, 42, 22, 0.06);
+      }
+
+      .section {
+        margin-top: 34px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      .section h2 {
+        margin: 0;
+        color: var(--leaf-800);
+        font-size: clamp(28px, 4vw, 44px);
+        letter-spacing: -0.04em;
+      }
+
+      .section-head p {
+        max-width: 520px;
+        margin: 0;
+        color: var(--muted);
+        font-weight: 650;
+        line-height: 1.7;
+      }
+
+      .card {
+        border: 1px solid rgba(11, 79, 42, 0.12);
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 18px 50px rgba(6, 42, 22, 0.08);
+      }
+
+      .journey {
+        padding: 24px;
+      }
+
+      .lane-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .lane-header h3 {
+        margin: 0;
+        color: var(--leaf-800);
+        font-size: 24px;
+      }
+
+      .lane-header p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-weight: 650;
+        line-height: 1.7;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: var(--leaf-100);
+        color: var(--leaf-800);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(180px, 1fr));
+        gap: 14px;
+        overflow-x: auto;
+        padding: 8px 2px 14px;
+        scrollbar-color: var(--leaf-700) rgba(11, 79, 42, 0.08);
+      }
+
+      .step {
+        position: relative;
+        min-height: 210px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px;
+        background: linear-gradient(180deg, #ffffff, #fbfff8);
+      }
+
+      .step::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -16px;
+        z-index: 2;
+        width: 22px;
+        height: 2px;
+        background: var(--leaf-700);
+      }
+
+      .step:last-child::after {
+        display: none;
+      }
+
+      .step-number {
+        display: inline-grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--sun);
+        color: var(--leaf-800);
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .step h4 {
+        margin: 14px 0 0;
+        color: var(--leaf-800);
+        font-size: 18px;
+      }
+
+      .step p {
+        margin: 9px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 650;
+        line-height: 1.65;
+      }
+
+      .route {
+        display: inline-flex;
+        margin-top: 14px;
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: #f3f8ee;
+        color: var(--leaf-700);
+        font-family: Consolas, "SFMono-Regular", monospace;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .student .step {
+        background:
+          linear-gradient(180deg, rgba(223, 245, 230, 0.35), transparent),
+          #ffffff;
+      }
+
+      .teacher .step {
+        background:
+          linear-gradient(180deg, rgba(255, 248, 231, 0.72), transparent),
+          #ffffff;
+      }
+
+      .matrix {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .mini-card {
+        padding: 22px;
+      }
+
+      .mini-card h3 {
+        margin: 0;
+        color: var(--leaf-800);
+        font-size: 20px;
+      }
+
+      .mini-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-weight: 650;
+        line-height: 1.7;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+        margin: 16px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .list li {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 13px 14px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--ink);
+        font-weight: 750;
+        line-height: 1.55;
+      }
+
+      .syntax {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(150px, 1fr));
+        gap: 14px;
+      }
+
+      .syntax-item {
+        border: 1px solid rgba(22, 122, 58, 0.16);
+        border-radius: 22px;
+        padding: 18px;
+        background: linear-gradient(180deg, #ffffff, #f8fff4);
+      }
+
+      .syntax-item strong {
+        display: block;
+        color: var(--leaf-800);
+        font-size: 16px;
+      }
+
+      .syntax-item span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 750;
+        line-height: 1.6;
+      }
+
+      .diagram-card {
+        overflow: hidden;
+        padding: 22px;
+      }
+
+      .flow-diagram {
+        width: 100%;
+        height: auto;
+        min-width: 860px;
+      }
+
+      .diagram-scroll {
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-color: var(--leaf-700) rgba(11, 79, 42, 0.08);
+      }
+
+      .diagram-lane-title {
+        font-size: 18px;
+        font-weight: 950;
+        fill: var(--leaf-900);
+      }
+
+      .diagram-node-title {
+        font-size: 15px;
+        font-weight: 900;
+        fill: var(--leaf-900);
+      }
+
+      .diagram-node-copy {
+        font-size: 11px;
+        font-weight: 700;
+        fill: var(--muted);
+      }
+
+      .diagram-route {
+        font-size: 10px;
+        font-family: Consolas, "SFMono-Regular", monospace;
+        font-weight: 800;
+        fill: var(--leaf-700);
+      }
+
+      .diagram-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .diagram-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 9px 12px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 850;
+      }
+
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--leaf-700);
+      }
+
+      .legend-dot.teacher {
+        background: var(--sun);
+      }
+
+      .legend-dot.handoff {
+        background: var(--sky);
+      }
+
+      .handoff {
+        display: grid;
+        grid-template-columns: 1fr 86px 1fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .handoff-panel {
+        padding: 22px;
+      }
+
+      .handoff-panel h3 {
+        margin: 0;
+        color: var(--leaf-800);
+        font-size: 22px;
+      }
+
+      .handoff-panel p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-weight: 650;
+        line-height: 1.7;
+      }
+
+      .bridge {
+        display: grid;
+        place-items: center;
+        border-radius: 30px;
+        background:
+          linear-gradient(180deg, var(--sun), #f8d76f);
+        color: var(--leaf-900);
+        font-weight: 950;
+      }
+
+      .footer-note {
+        margin-top: 34px;
+        border-radius: 24px;
+        padding: 18px 20px;
+        background: rgba(6, 42, 22, 0.92);
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+        font-weight: 650;
+        line-height: 1.7;
+      }
+
+      .footer-note strong {
+        color: var(--sun);
+      }
+
+      @media (max-width: 920px) {
+        .hero-grid,
+        .matrix,
+        .handoff {
+          grid-template-columns: 1fr;
+        }
+
+        .bridge {
+          min-height: 64px;
+        }
+
+        .section-head,
+        .lane-header {
+          display: block;
+        }
+
+        .section-head p {
+          margin-top: 10px;
+        }
+
+        .syntax {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .page {
+          width: min(100% - 20px, 1180px);
+          padding-top: 14px;
+        }
+
+        .hero {
+          border-radius: 26px;
+        }
+
+        .hero-grid,
+        .syntax {
+          grid-template-columns: 1fr;
+        }
+
+        .flow {
+          grid-template-columns: repeat(5, minmax(230px, 1fr));
+        }
+      }
+
+      @media print {
+        body {
+          background: #ffffff;
+        }
+
+        .page {
+          width: 100%;
+          padding: 0;
+        }
+
+        .card,
+        .hero {
+          box-shadow: none;
+        }
+
+        .toc {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <span class="eyebrow">EcoGrow LMS user flow</span>
+        <h1>Alur pengguna siswa dan guru dalam satu perjalanan belajar ekologis.</h1>
+        <p>
+          Peta ini merangkum bagaimana siswa bergerak dari orientasi, belajar, aksi kebun,
+          bermain, refleksi, sampai portofolio; sementara guru memantau kelas, memberi
+          umpan balik, menilai, dan menyiapkan tindak lanjut.
+        </p>
+        <div class="hero-grid" aria-label="Ringkasan alur">
+          <div class="hero-stat">
+            <strong>2</strong>
+            <span>Role utama: siswa dan guru</span>
+          </div>
+          <div class="hero-stat">
+            <strong>5</strong>
+            <span>Tahap sintaks EcoGrow</span>
+          </div>
+          <div class="hero-stat">
+            <strong>11+</strong>
+            <span>Halaman siswa aktif</span>
+          </div>
+          <div class="hero-stat">
+            <strong>9</strong>
+            <span>Area kerja guru</span>
+          </div>
+        </div>
+      </section>
+
+      <nav class="toc" aria-label="Daftar isi">
+        <a href="#prinsip">Prinsip alur</a>
+        <a href="#diagram-flow">Diagram flow</a>
+        <a href="#siswa">Alur siswa</a>
+        <a href="#guru">Alur guru</a>
+        <a href="#handoff">Handoff siswa-guru</a>
+        <a href="#route-map">Route map</a>
+      </nav>
+
+      <section class="section" id="prinsip">
+        <div class="section-head">
+          <h2>Prinsip Alur</h2>
+          <p>
+            EcoGrow LMS tidak diposisikan sebagai kumpulan menu, tetapi sebagai siklus
+            belajar yang selalu memberi arahan langkah berikutnya.
+          </p>
+        </div>
+        <div class="syntax">
+          <div class="syntax-item">
+            <strong>1. Kenali Alam</strong>
+            <span>Siswa mengenali tanaman, kebun, dan kesiapan belajarnya.</span>
+          </div>
+          <div class="syntax-item">
+            <strong>2. Jelajahi Masalah</strong>
+            <span>Siswa memahami kebutuhan tanaman melalui materi singkat.</span>
+          </div>
+          <div class="syntax-item">
+            <strong>3. Lakukan Aksi</strong>
+            <span>Siswa menjalankan misi, mencatat bukti, dan berlatih.</span>
+          </div>
+          <div class="syntax-item">
+            <strong>4. Cerita dan Renungan</strong>
+            <span>Siswa merefleksikan pengalaman dan menerima pesan guru.</span>
+          </div>
+          <div class="syntax-item">
+            <strong>5. Pamerkan Hasil</strong>
+            <span>Siswa melihat album, galeri, badge, dan laporan belajar.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="diagram-flow">
+        <div class="section-head">
+          <h2>Diagram Flow</h2>
+          <p>
+            Diagram ini memperlihatkan hubungan besar antara perjalanan siswa, ruang kerja guru,
+            dan titik handoff ketika bukti belajar berubah menjadi feedback serta tindak lanjut.
+          </p>
+        </div>
+        <article class="card diagram-card" aria-label="Diagram flow EcoGrow LMS">
+          <div class="diagram-scroll">
+            <svg
+              class="flow-diagram"
+              viewBox="0 0 1120 680"
+              role="img"
+              aria-labelledby="flow-diagram-title flow-diagram-desc"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title id="flow-diagram-title">Diagram flow LMS EcoGrow untuk siswa dan guru</title>
+              <desc id="flow-diagram-desc">
+                Siswa masuk, belajar, menjalankan misi, bermain, refleksi, lalu melihat portofolio.
+                Guru masuk, menyiapkan modul, memonitor, menilai, membaca laporan, dan memberi tindak lanjut.
+              </desc>
+              <defs>
+                <linearGradient id="studentLane" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#dff5e6" />
+                  <stop offset="100%" stop-color="#ffffff" />
+                </linearGradient>
+                <linearGradient id="teacherLane" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fff8e7" />
+                  <stop offset="100%" stop-color="#ffffff" />
+                </linearGradient>
+                <linearGradient id="handoffLane" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#e7f8ff" />
+                  <stop offset="100%" stop-color="#f9fff4" />
+                </linearGradient>
+                <filter id="nodeShadow" x="-20%" y="-30%" width="140%" height="170%">
+                  <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#062a16" flood-opacity="0.13" />
+                </filter>
+                <marker id="arrowLeaf" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L10,6 L2,10 Z" fill="#167a3a" />
+                </marker>
+                <marker id="arrowSun" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L10,6 L2,10 Z" fill="#9a6b3f" />
+                </marker>
+                <marker id="arrowSky" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L10,6 L2,10 Z" fill="#0ea5d5" />
+                </marker>
+              </defs>
+
+              <rect x="20" y="24" width="1080" height="190" rx="34" fill="url(#studentLane)" stroke="#b9dcc5" />
+              <rect x="20" y="246" width="1080" height="168" rx="34" fill="url(#handoffLane)" stroke="#c7e9f5" />
+              <rect x="20" y="448" width="1080" height="190" rx="34" fill="url(#teacherLane)" stroke="#efd894" />
+
+              <text class="diagram-lane-title" x="48" y="62">Swimlane Siswa</text>
+              <text class="diagram-lane-title" x="48" y="286">Handoff Data Belajar</text>
+              <text class="diagram-lane-title" x="48" y="486">Swimlane Guru</text>
+
+              <g filter="url(#nodeShadow)">
+                <rect x="54" y="88" width="145" height="92" rx="22" fill="#ffffff" stroke="#d7e6da" />
+                <text class="diagram-node-title" x="74" y="120">Login Siswa</text>
+                <text class="diagram-node-copy" x="74" y="142">Masuk ruang belajar</text>
+                <text class="diagram-route" x="74" y="164">/login -> /siswa</text>
+
+                <rect x="247" y="88" width="145" height="92" rx="22" fill="#ffffff" stroke="#d7e6da" />
+                <text class="diagram-node-title" x="267" y="116">Kuis Awal</text>
+                <text class="diagram-node-copy" x="267" y="138">Profil belajar</text>
+                <text class="diagram-route" x="267" y="160">/siswa/ecoreadiness</text>
+
+                <rect x="440" y="88" width="145" height="92" rx="22" fill="#ffffff" stroke="#d7e6da" />
+                <text class="diagram-node-title" x="460" y="116">Belajar</text>
+                <text class="diagram-node-copy" x="460" y="138">Materi mikro</text>
+                <text class="diagram-route" x="460" y="160">/siswa/ecolearn</text>
+
+                <rect x="633" y="88" width="145" height="92" rx="22" fill="#ffffff" stroke="#d7e6da" />
+                <text class="diagram-node-title" x="653" y="116">Misi Kebun</text>
+                <text class="diagram-node-copy" x="653" y="138">Jurnal dan bukti</text>
+                <text class="diagram-route" x="653" y="160">/siswa/ecomission</text>
+
+                <rect x="826" y="88" width="145" height="92" rx="22" fill="#ffffff" stroke="#d7e6da" />
+                <text class="diagram-node-title" x="846" y="116">EcoPlay</text>
+                <text class="diagram-node-copy" x="846" y="138">Latihan interaktif</text>
+                <text class="diagram-route" x="846" y="160">/siswa/ecoplay</text>
+              </g>
+
+              <path d="M204 134 H236" stroke="#167a3a" stroke-width="4" fill="none" marker-end="url(#arrowLeaf)" />
+              <path d="M397 134 H429" stroke="#167a3a" stroke-width="4" fill="none" marker-end="url(#arrowLeaf)" />
+              <path d="M590 134 H622" stroke="#167a3a" stroke-width="4" fill="none" marker-end="url(#arrowLeaf)" />
+              <path d="M783 134 H815" stroke="#167a3a" stroke-width="4" fill="none" marker-end="url(#arrowLeaf)" />
+
+              <g filter="url(#nodeShadow)">
+                <rect x="150" y="305" width="180" height="72" rx="22" fill="#ffffff" stroke="#c7e9f5" />
+                <text class="diagram-node-title" x="172" y="334">Bukti dan Jurnal</text>
+                <text class="diagram-node-copy" x="172" y="354">Foto, catatan, hasil latihan</text>
+
+                <rect x="470" y="305" width="180" height="72" rx="22" fill="#ffffff" stroke="#c7e9f5" />
+                <text class="diagram-node-title" x="492" y="334">Feedback Guru</text>
+                <text class="diagram-node-copy" x="492" y="354">Pesan cepat dan rekomendasi</text>
+
+                <rect x="790" y="305" width="180" height="72" rx="22" fill="#ffffff" stroke="#c7e9f5" />
+                <text class="diagram-node-title" x="812" y="334">Langkah Berikutnya</text>
+                <text class="diagram-node-copy" x="812" y="354">Latihan ulang atau tantangan</text>
+              </g>
+
+              <path d="M706 180 C706 236 240 236 240 296" stroke="#0ea5d5" stroke-width="4" fill="none" marker-end="url(#arrowSky)" />
+              <path d="M335 341 H459" stroke="#0ea5d5" stroke-width="4" fill="none" marker-end="url(#arrowSky)" />
+              <path d="M655 341 H779" stroke="#0ea5d5" stroke-width="4" fill="none" marker-end="url(#arrowSky)" />
+
+              <g filter="url(#nodeShadow)">
+                <rect x="54" y="512" width="145" height="92" rx="22" fill="#ffffff" stroke="#efd894" />
+                <text class="diagram-node-title" x="74" y="540">Login Guru</text>
+                <text class="diagram-node-copy" x="74" y="562">Prioritas harian</text>
+                <text class="diagram-route" x="74" y="584">/login -> /guru</text>
+
+                <rect x="247" y="512" width="145" height="92" rx="22" fill="#ffffff" stroke="#efd894" />
+                <text class="diagram-node-title" x="267" y="540">Modul Ajar</text>
+                <text class="diagram-node-copy" x="267" y="562">LKPD dan rubrik</text>
+                <text class="diagram-route" x="267" y="584">/guru/modul-ajar</text>
+
+                <rect x="440" y="512" width="145" height="92" rx="22" fill="#ffffff" stroke="#efd894" />
+                <text class="diagram-node-title" x="460" y="540">Monitoring</text>
+                <text class="diagram-node-copy" x="460" y="562">Review jurnal</text>
+                <text class="diagram-route" x="460" y="584">/guru/monitoring</text>
+
+                <rect x="633" y="512" width="145" height="92" rx="22" fill="#ffffff" stroke="#efd894" />
+                <text class="diagram-node-title" x="653" y="540">Asesmen</text>
+                <text class="diagram-node-copy" x="653" y="562">Cek capaian siswa</text>
+                <text class="diagram-route" x="653" y="584">/guru/asesmen</text>
+
+                <rect x="826" y="512" width="145" height="92" rx="22" fill="#ffffff" stroke="#efd894" />
+                <text class="diagram-node-title" x="846" y="540">Laporan</text>
+                <text class="diagram-node-copy" x="846" y="562">Tindak lanjut kelas</text>
+                <text class="diagram-route" x="846" y="584">/guru/laporan</text>
+              </g>
+
+              <path d="M204 558 H236" stroke="#9a6b3f" stroke-width="4" fill="none" marker-end="url(#arrowSun)" />
+              <path d="M397 558 H429" stroke="#9a6b3f" stroke-width="4" fill="none" marker-end="url(#arrowSun)" />
+              <path d="M590 558 H622" stroke="#9a6b3f" stroke-width="4" fill="none" marker-end="url(#arrowSun)" />
+              <path d="M783 558 H815" stroke="#9a6b3f" stroke-width="4" fill="none" marker-end="url(#arrowSun)" />
+
+              <path d="M560 512 C560 450 560 438 560 388" stroke="#0ea5d5" stroke-width="4" fill="none" marker-end="url(#arrowSky)" />
+              <path d="M880 377 C880 430 900 444 900 502" stroke="#0ea5d5" stroke-width="4" fill="none" marker-end="url(#arrowSky)" />
+              <path d="M971 558 C1052 558 1052 134 982 134" stroke="#167a3a" stroke-width="4" stroke-dasharray="10 8" fill="none" marker-end="url(#arrowLeaf)" />
+              <text class="diagram-node-copy" x="1000" y="336" transform="rotate(90 1000 336)">loop rekomendasi ke siswa</text>
+            </svg>
+          </div>
+          <div class="diagram-legend" aria-label="Legenda diagram flow">
+            <span><i class="legend-dot"></i>Alur aktivitas siswa</span>
+            <span><i class="legend-dot teacher"></i>Alur kerja guru</span>
+            <span><i class="legend-dot handoff"></i>Handoff data, feedback, dan tindak lanjut</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="section student" id="siswa">
+        <div class="section-head">
+          <h2>Alur Siswa</h2>
+          <p>
+            Tujuan alur siswa: anak tahu apa yang harus dilakukan hari ini, memahami
+            kaitan belajar dengan kebun, mendapat apresiasi, lalu melihat capaian.
+          </p>
+        </div>
+        <article class="card journey">
+          <div class="lane-header">
+            <div>
+              <h3>Journey siswa: dari masuk sampai portofolio</h3>
+              <p>Alur utama memakai bahasa ramah anak dan tombol aksi yang jelas.</p>
+            </div>
+            <span class="tag">Role: Siswa</span>
+          </div>
+          <div class="flow" aria-label="Alur utama siswa">
+            <div class="step">
+              <span class="step-number">01</span>
+              <h4>Masuk sebagai siswa</h4>
+              <p>Pilih akun siswa, masuk ke ruang belajar, lalu melihat sapaan, level, badge, dan misi hari ini.</p>
+              <span class="route">/login -> /siswa</span>
+            </div>
+            <div class="step">
+              <span class="step-number">02</span>
+              <h4>Kuis Awal</h4>
+              <p>Wizard singkat untuk mengenali cara belajar, pemahaman awal, dan rekomendasi topik.</p>
+              <span class="route">/siswa/ecoreadiness</span>
+            </div>
+            <div class="step">
+              <span class="step-number">03</span>
+              <h4>Belajar</h4>
+              <p>Membaca materi mikro seperti cahaya, air, daun, dan fotosintesis sebelum aksi kebun.</p>
+              <span class="route">/siswa/ecolearn</span>
+            </div>
+            <div class="step">
+              <span class="step-number">04</span>
+              <h4>Misi Tanaman</h4>
+              <p>Mencatat tinggi tanaman, kondisi daun, catatan singkat, dan bukti foto mock.</p>
+              <span class="route">/siswa/ecomission</span>
+            </div>
+            <div class="step">
+              <span class="step-number">05</span>
+              <h4>Bermain dan latihan</h4>
+              <p>Melatih konsep lewat EcoPlay, misalnya urutan fotosintesis dan pilah bahan kompos.</p>
+              <span class="route">/siswa/ecoplay</span>
+            </div>
+          </div>
+          <div class="flow" aria-label="Alur lanjutan siswa">
+            <div class="step">
+              <span class="step-number">06</span>
+              <h4>Kuis Akhir</h4>
+              <p>Menjawab soal satu per layar, menerima feedback langsung, lalu mendapat rekomendasi lanjut.</p>
+              <span class="route">/siswa/ecomaster-quiz</span>
+            </div>
+            <div class="step">
+              <span class="step-number">07</span>
+              <h4>Cerita Belajarku</h4>
+              <p>Memilih mood, menulis pengalaman, membuat janji kecil, dan memberi apresiasi teman.</p>
+              <span class="route">/siswa/cerita-belajarku</span>
+            </div>
+            <div class="step">
+              <span class="step-number">08</span>
+              <h4>Album Belajarku</h4>
+              <p>Melihat foto tanaman, jurnal terbaik, badge, karya, dan pesan guru sebagai rekam jejak.</p>
+              <span class="route">/siswa/portofolio</span>
+            </div>
+            <div class="step">
+              <span class="step-number">09</span>
+              <h4>Laporan Belajar</h4>
+              <p>Membaca kemajuan pribadi, rekomendasi latihan ulang, dan tantangan lanjutan.</p>
+              <span class="route">/siswa/laporan-belajar</span>
+            </div>
+            <div class="step">
+              <span class="step-number">10</span>
+              <h4>Galeri, tantangan, panen</h4>
+              <p>Melihat pameran karya, melakukan tantangan rumah, dan merayakan hasil panen.</p>
+              <span class="route">/siswa/galeri + lainnya</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section teacher" id="guru">
+        <div class="section-head">
+          <h2>Alur Guru</h2>
+          <p>
+            Tujuan alur guru: membuka dashboard, tahu prioritas kelas, memberi umpan
+            balik cepat, memantau proyek, menilai, dan membaca laporan untuk tindak lanjut.
+          </p>
+        </div>
+        <article class="card journey">
+          <div class="lane-header">
+            <div>
+              <h3>Journey guru: dari ringkasan harian sampai keputusan kelas</h3>
+              <p>Guru bekerja dari informasi paling mendesak menuju detail saat dibutuhkan.</p>
+            </div>
+            <span class="tag">Role: Guru</span>
+          </div>
+          <div class="flow" aria-label="Alur utama guru">
+            <div class="step">
+              <span class="step-number">01</span>
+              <h4>Masuk sebagai guru</h4>
+              <p>Guru masuk ke ruang guru dan langsung melihat kondisi kelas, jurnal perlu review, dan siswa perlu dukungan.</p>
+              <span class="route">/login -> /guru</span>
+            </div>
+            <div class="step">
+              <span class="step-number">02</span>
+              <h4>Siapkan modul ajar</h4>
+              <p>Membuka tujuan pembelajaran, LKPD, rubrik, media, dan checklist kelengkapan.</p>
+              <span class="route">/guru/modul-ajar</span>
+            </div>
+            <div class="step">
+              <span class="step-number">03</span>
+              <h4>Kelola proyek</h4>
+              <p>Meninjau proyek kelas, pembagian tim, target misi, dan tahapan EcoGrow.</p>
+              <span class="route">/guru/proyek</span>
+            </div>
+            <div class="step">
+              <span class="step-number">04</span>
+              <h4>Monitoring harian</h4>
+              <p>Melihat jurnal siswa, status bukti, template feedback cepat, dan prioritas sebelum pulang.</p>
+              <span class="route">/guru/monitoring</span>
+            </div>
+            <div class="step">
+              <span class="step-number">05</span>
+              <h4>Asesmen</h4>
+              <p>Meninjau KAIH, kuis awal, latihan misi, kuis akhir, dan rekomendasi tindak lanjut.</p>
+              <span class="route">/guru/asesmen</span>
+            </div>
+          </div>
+          <div class="flow" aria-label="Alur lanjutan guru">
+            <div class="step">
+              <span class="step-number">06</span>
+              <h4>Laporan kelas</h4>
+              <p>Membaca ringkasan capaian, siswa yang perlu bantuan, dan rencana latihan ulang.</p>
+              <span class="route">/guru/laporan</span>
+            </div>
+            <div class="step">
+              <span class="step-number">07</span>
+              <h4>Analitik tahap</h4>
+              <p>Melihat distribusi tahap EcoGrow, tren jurnal, dan area yang perlu penguatan.</p>
+              <span class="route">/guru/analitik</span>
+            </div>
+            <div class="step">
+              <span class="step-number">08</span>
+              <h4>Galeri karya</h4>
+              <p>Memilih karya untuk apresiasi dan menguatkan Eco-Exhibition kelas.</p>
+              <span class="route">/guru/galeri</span>
+            </div>
+            <div class="step">
+              <span class="step-number">09</span>
+              <h4>Panduan</h4>
+              <p>Membuka referensi praktik, istilah, dan bantuan penggunaan LMS.</p>
+              <span class="route">/guru/panduan</span>
+            </div>
+            <div class="step">
+              <span class="step-number">10</span>
+              <h4>Tindak lanjut</h4>
+              <p>Mengirim pesan, memberi latihan ulang, menyiapkan tantangan lanjutan, atau mengarahkan portofolio.</p>
+              <span class="route">Loop ke siswa</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="handoff">
+        <div class="section-head">
+          <h2>Handoff Siswa dan Guru</h2>
+          <p>
+            Data mock dalam LMS menjadi jembatan: aksi siswa menghasilkan bukti dan cerita,
+            lalu guru mengubahnya menjadi feedback, asesmen, dan rekomendasi.
+          </p>
+        </div>
+        <div class="handoff">
+          <article class="card handoff-panel">
+            <h3>Yang dibuat siswa</h3>
+            <p>Bukti misi, jurnal, jawaban kuis, hasil EcoPlay, mood refleksi, janji kecil, dan karya galeri.</p>
+            <ul class="list">
+              <li>Kirim bukti tanaman dan catatan harian.</li>
+              <li>Selesaikan latihan, kuis, dan mini-game.</li>
+              <li>Bangun Album Belajarku sebagai portofolio.</li>
+            </ul>
+          </article>
+          <div class="bridge">SYNC</div>
+          <article class="card handoff-panel">
+            <h3>Yang dilakukan guru</h3>
+            <p>Meninjau bukti, memberi pesan guru, memantau siswa yang perlu dukungan, dan membuat keputusan kelas.</p>
+            <ul class="list">
+              <li>Review jurnal dan foto siswa.</li>
+              <li>Beri feedback cepat dan rekomendasi.</li>
+              <li>Baca laporan untuk latihan ulang atau tantangan lanjutan.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="route-map">
+        <div class="section-head">
+          <h2>Route Map Ringkas</h2>
+          <p>
+            Daftar ini berguna sebagai checklist QA saat memastikan setiap menu punya arah,
+            output, dan tindak lanjut yang jelas.
+          </p>
+        </div>
+        <div class="matrix">
+          <article class="card mini-card">
+            <h3>Menu siswa</h3>
+            <ul class="list">
+              <li><strong>/siswa</strong> - Beranda, misi hari ini, EcoPoint, pesan guru.</li>
+              <li><strong>/siswa/ecoreadiness</strong> - Kuis Awal dan profil belajar.</li>
+              <li><strong>/siswa/ecolearn</strong> - Materi mikro dan rekomendasi misi.</li>
+              <li><strong>/siswa/ecomission</strong> - Catatan tanaman dan bukti misi.</li>
+              <li><strong>/siswa/ecoplay</strong> - Mini-game dan latihan konsep.</li>
+              <li><strong>/siswa/ecomaster-quiz</strong> - Kuis Akhir dengan feedback langsung.</li>
+              <li><strong>/siswa/cerita-belajarku</strong> - Refleksi, mood, eco promise.</li>
+              <li><strong>/siswa/portofolio</strong> - Album Belajarku dan capaian.</li>
+              <li><strong>/siswa/galeri</strong> - Pameran karya dan apresiasi.</li>
+              <li><strong>/siswa/laporan-belajar</strong> - Ringkasan perkembangan.</li>
+              <li><strong>/siswa/ecochallenge</strong> dan <strong>/siswa/ecomart</strong> - Tantangan rumah dan panen.</li>
+            </ul>
+          </article>
+          <article class="card mini-card">
+            <h3>Menu guru</h3>
+            <ul class="list">
+              <li><strong>/guru</strong> - Ringkasan harian, prioritas, review jurnal.</li>
+              <li><strong>/guru/modul-ajar</strong> - Modul, LKPD, rubrik, checklist.</li>
+              <li><strong>/guru/proyek</strong> - Proyek kelas dan tahapan EcoGrow.</li>
+              <li><strong>/guru/monitoring</strong> - Jurnal, bukti, feedback cepat.</li>
+              <li><strong>/guru/asesmen</strong> - KAIH, kuis, rekomendasi belajar.</li>
+              <li><strong>/guru/laporan</strong> - Laporan kelas dan tindak lanjut.</li>
+              <li><strong>/guru/analitik</strong> - Tren capaian dan tahap pembelajaran.</li>
+              <li><strong>/guru/galeri</strong> - Kurasi karya dan Eco-Exhibition.</li>
+              <li><strong>/guru/panduan</strong> - Bantuan penggunaan dan referensi.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <p class="footer-note">
+        <strong>Catatan penggunaan:</strong> file HTML ini bersifat standalone dan dapat dibuka langsung
+        melalui browser. Konten disusun berdasarkan route aplikasi, navigasi siswa/guru, dan ringkasan
+        revisi frontend EcoGrow LMS.
+      </p>
+    </main>
+  </body>
+</html>
