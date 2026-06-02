@@ -161,3 +161,7 @@ Role: Guru
 - `docs/planning/02_generate_prototype_mockup_ecogrow_lms.md`
 - `docs/planning/03_integrasi_backend_frontend_ecogrow_lms.md`
 - `rangkuman-revisi-frontend-ecogrow-lms-design-thinking.md`
+
+## Lisensi
+
+Project ini dilisensikan di bawah GNU Affero General Public License v3.0. Lihat `LICENSE` untuk detail lengkap.

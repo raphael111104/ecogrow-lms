@@ -3,6 +3,7 @@ node_modules/
 .vercel/
 .playwright-cli/
 .superpowers/
+docs/
 
 *.log
 tsconfig.tsbuildinfo
