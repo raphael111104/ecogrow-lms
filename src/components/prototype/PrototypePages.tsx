@@ -38,7 +38,7 @@ import { SelfPeerChecklist } from "@/components/ecogrow/SelfPeerChecklist";
 import { TeachingModuleSummaryCard } from "@/components/ecogrow/TeachingModuleSummaryCard";
 import { EvidencePreview } from "@/components/shared/EvidencePreview";
 import { MockUploadBox } from "@/components/shared/MockUploadBox";
-import { PancanitiStepper } from "@/components/shared/PancanitiStepper";
+import { EcoGrowStepper } from "@/components/shared/EcoGrowStepper";
 import { RecommendationCard } from "@/components/shared/RecommendationCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import {
@@ -70,7 +70,7 @@ import {
   studentTodaySummary,
   selfAssessmentChecklist,
   users,
-  legacyStageToEcoGrowStage,
+  stageIdToEcoGrowStage,
 } from "@/data";
 import { useMockStorage } from "@/hooks/useMockStorage";
 import { calculateLevel, getLevelName, getProgressToNextLevel } from "@/lib/gamification";
@@ -84,7 +84,7 @@ import type {
   GalleryCategory,
   GalleryPost,
   JournalEntry,
-  PancanitiStage,
+  EcoGrowStage,
   QuizAttempt,
   ReflectionEntry,
 } from "@/types/ecogrow";
@@ -375,7 +375,7 @@ function StudentSteps({ title = "Cara pakai halaman ini", steps }: { title?: str
   );
 }
 
-function StudentStageStrip({ activeStage = "NITI_BUKTI" as PancanitiStage }: { activeStage?: PancanitiStage }) {
+function StudentStageStrip({ activeStage = "NITI_BUKTI" as EcoGrowStage }: { activeStage?: EcoGrowStage }) {
   return (
     <div className="flex flex-wrap gap-2">
       {ecogrowStages.map((stage) => (
@@ -383,7 +383,7 @@ function StudentStageStrip({ activeStage = "NITI_BUKTI" as PancanitiStage }: { a
           key={stage.id}
           stageId={stage.id}
           showShortLabel
-          variant={legacyStageToEcoGrowStage[activeStage] === stage.id ? "solid" : "soft"}
+          variant={stageIdToEcoGrowStage[activeStage] === stage.id ? "solid" : "soft"}
         />
       ))}
     </div>
@@ -890,8 +890,8 @@ function PancanitiJourneyMap({
   selectedStage,
   onSelect,
 }: {
-  selectedStage?: PancanitiStage;
-  onSelect?: (stage: PancanitiStage) => void;
+  selectedStage?: EcoGrowStage;
+  onSelect?: (stage: EcoGrowStage) => void;
 }) {
   return (
     <div className="relative grid gap-3 md:grid-cols-5">
@@ -1003,7 +1003,7 @@ export function SiswaDashboardMock() {
               title={`${studentTodaySummary.latestPlant.heightCm} cm, ${studentTodaySummary.latestPlant.leafCount} daun`}
               description={studentTodaySummary.latestPlant.message}
             />
-            <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[studentTodaySummary.activeStage]} />
+            <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[studentTodaySummary.activeStage]} />
           </div>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {[
@@ -1159,7 +1159,7 @@ export function EcoLearnPage() {
   const filteredContents =
     stageFilter === "all"
       ? ecoLearnContents
-      : ecoLearnContents.filter((content) => legacyStageToEcoGrowStage[content.relatedStage] === stageFilter);
+      : ecoLearnContents.filter((content) => stageIdToEcoGrowStage[content.relatedStage] === stageFilter);
 
   const finishCheck = () => {
     setReward(correct === ecoLearnChecks.length ? "Mini-check selesai. Kamu mendapat 25 EcoPoint mock!" : "Masih ada jawaban yang perlu dicoba lagi. Baca kartu konsep pelan-pelan, ya.");
@@ -1174,9 +1174,9 @@ export function EcoLearnPage() {
         icon={BookOpen}
         actions={<EcoButton href="/siswa/ecomission" variant="reward">Lanjut Misi</EcoButton>}
         metrics={[
-          { label: "Durasi", value: "9 menit", note: "Materi pendek" },
-          { label: "Topik", value: "6", note: "Sains dan pangan sehat" },
-          { label: "Mini-check", value: `${correct}/3`, note: "Pemahaman awal" },
+          { label: "Durasi", value: `${ecoLearnContents.reduce((total, item) => total + item.durationMinute, 0)} menit`, note: "Materi pendek" },
+          { label: "Topik", value: `${ecoLearnContents.length}`, note: "Sains dan pangan sehat" },
+          { label: "Mini-check", value: `${correct}/${ecoLearnChecks.length}`, note: "Pemahaman awal" },
         ]}
       />
 
@@ -1255,7 +1255,7 @@ export function EcoLearnPage() {
                 <div className="p-4">
                 <div className="flex flex-wrap gap-2">
                   <EcoBadge className="bg-sun/25 text-earth">{content.durationMinute} menit</EcoBadge>
-                  <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[content.relatedStage]} />
+                  <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[content.relatedStage]} />
                 </div>
                 <h3 className="mt-3 font-heading text-xl font-black text-leaf-700">{content.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-mutedText">{content.summary}</p>
@@ -1330,7 +1330,7 @@ export function EcoMissionPage() {
   const [storedJournals, setStoredJournals] = useStoredList<JournalEntry>("ecogrow-journals", studentJournals);
   const [lkpdSubmissions, setLkpdSubmissions] = useStoredList<EcoGrowLkpdSubmission>("ecoGrow-lkpd-submissions", []);
   const [points, setPoints] = useStoredNumber("ecogrow-points", profile.points);
-  const [selectedStage, setSelectedStage] = useState<PancanitiStage>(activeMission.stage);
+  const [selectedStage, setSelectedStage] = useState<EcoGrowStage>(activeMission.stage);
   const [missionStatus, setMissionStatus] = useState(activeMission.status);
   const [toast, setToast] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
@@ -1436,7 +1436,7 @@ export function EcoMissionPage() {
         icon={ClipboardCheck}
       />
       <EcoCard>
-        <PancanitiStepper stages={missionData.missionStages} activeStage={selectedStage} onSelect={setSelectedStage} />
+        <EcoGrowStepper stages={missionData.missionStages} activeStage={selectedStage} onSelect={setSelectedStage} />
       </EcoCard>
       <section>
         <SectionTitle eyebrow="Progres LKPD Digital EcoGrow" title="Lima bukti dari Recognition sampai Exhibition" />
@@ -1454,7 +1454,7 @@ export function EcoMissionPage() {
       <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <EcoCard tone="cream">
           <div className="flex flex-wrap items-center gap-2">
-            <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[selectedMission.stage]} />
+            <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[selectedMission.stage]} />
             <StatusBadge status={selectedStageProgress?.status ?? selectedMission.status} />
           </div>
           <h2 className="mt-4 font-heading text-3xl font-black text-leaf-700">{selectedMission.title}</h2>
@@ -1726,7 +1726,7 @@ export function StudentGalleryPage() {
     supportingData: "Tinggi 31 cm, 16 daun, air nutrisi 200 ml.",
     imageUrl: "/assets/images/hydroponic-water-spinach.jpg",
     category: "foto_tanaman" as GalleryCategory,
-    stage: "NITI_SAJATI" as PancanitiStage,
+    stage: "NITI_SAJATI" as EcoGrowStage,
   });
   const filteredPosts = filter === "semua" ? posts : posts.filter((post) => post.category === filter);
 
@@ -1835,7 +1835,7 @@ export function StudentGalleryPage() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <EcoBadge className="bg-sun/25 text-earth">{post.category ?? "foto_tanaman"}</EcoBadge>
-                {post.stage ? <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[post.stage]} /> : null}
+                {post.stage ? <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[post.stage]} /> : null}
                 <EcoBadge className="bg-leaf-100 text-leaf-700">
                   {post.moderationStatus === "approved"
                     ? "Siap Eco-Exhibition"
@@ -2239,7 +2239,7 @@ export function PortfolioPage() {
       <EcoCard>
         <SectionTitle eyebrow="Progress Sintaks EcoGrow" title="Peta belajar portofolio" />
         <div className="mt-5">
-          <PancanitiStepper stages={dashboard.missionStages} activeStage={studentPortfolioSummary.activeStage} />
+          <EcoGrowStepper stages={dashboard.missionStages} activeStage={studentPortfolioSummary.activeStage} />
         </div>
       </EcoCard>
       <section className="grid gap-4 md:grid-cols-3">

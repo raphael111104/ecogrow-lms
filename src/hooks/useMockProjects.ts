@@ -1,12 +1,12 @@
 "use client";
 
 import { projects } from "@/data";
-import type { EcoMission, EcoProject, PancanitiStage } from "@/types/ecogrow";
+import type { EcoGrowStage, EcoMission, EcoProject } from "@/types/ecogrow";
 import { useMockStorage } from "./useMockStorage";
 
-const stages: PancanitiStage[] = ["NITI_HARTI", "NITI_SURTI", "NITI_BUKTI", "NITI_BAKTI", "NITI_SAJATI"];
+const stages: EcoGrowStage[] = ["NITI_HARTI", "NITI_SURTI", "NITI_BUKTI", "NITI_BAKTI", "NITI_SAJATI"];
 
-const stageTitles: Record<PancanitiStage, string> = {
+const stageTitles: Record<EcoGrowStage, string> = {
   NITI_HARTI: "Ecological Recognition (Niti Harti) - Mengenal proyek",
   NITI_SURTI: "Ecological Exploration (Niti Surti) - Memaknai data",
   NITI_BUKTI: "Ecological Execution (Niti Bukti) - Aksi perawatan",

@@ -19,6 +19,8 @@ export const landingNav = [
   { label: "Alur", href: "#alur-ecogrow" },
   { label: "Fitur", href: "#fitur" },
   { label: "Dampak", href: "#dampak" },
+  { label: "Muatan", href: "#muatan" },
+  { label: "SDGs", href: "#sdgs" },
 ];
 
 export const guruNavigation = [

@@ -39,7 +39,7 @@ import { RubricTable } from "@/components/ecogrow/RubricTable";
 import { TeachingModuleSummaryCard } from "@/components/ecogrow/TeachingModuleSummaryCard";
 import { AssessmentPackagePanel } from "@/components/guru/AssessmentPackagePanel";
 import { ModuleDocumentPreview } from "@/components/guru/ModuleDocumentPreview";
-import { PancanitiStepper } from "@/components/shared/PancanitiStepper";
+import { EcoGrowStepper } from "@/components/shared/EcoGrowStepper";
 import { RecommendationCard } from "@/components/shared/RecommendationCard";
 import { RubricScoreCard } from "@/components/shared/RubricScoreCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -76,7 +76,7 @@ import {
   teacherStageAnalytics,
   teacherQuickActions,
   users,
-  legacyStageToEcoGrowStage,
+  stageIdToEcoGrowStage,
 } from "@/data";
 import { useMockAssessments } from "@/hooks/useMockAssessments";
 import { useMockProjects } from "@/hooks/useMockProjects";
@@ -98,14 +98,14 @@ import type {
   GalleryPost,
   GeneratedModuleDraft,
   JournalEntry,
-  PancanitiStage,
+  EcoGrowStage,
   ReviewStatus,
   TeacherFeedback,
 } from "@/types/ecogrow";
 
 const inputClass = "eco-input";
 
-const stageLabel: Record<PancanitiStage, string> = {
+const stageLabel: Record<EcoGrowStage, string> = {
   NITI_HARTI: getEcoGrowStageLabel("NITI_HARTI"),
   NITI_SURTI: getEcoGrowStageLabel("NITI_SURTI"),
   NITI_BUKTI: getEcoGrowStageLabel("NITI_BUKTI"),
@@ -113,7 +113,7 @@ const stageLabel: Record<PancanitiStage, string> = {
   NITI_SAJATI: getEcoGrowStageLabel("NITI_SAJATI"),
 };
 
-const stageTone: Record<PancanitiStage, string> = {
+const stageTone: Record<EcoGrowStage, string> = {
   NITI_HARTI: "bg-leaf-100 text-leaf-700",
   NITI_SURTI: "bg-sky/15 text-sky",
   NITI_BUKTI: "bg-sun/25 text-earth",
@@ -299,7 +299,7 @@ function ProjectStatusCard() {
       <div className="mt-5 grid gap-3 md:grid-cols-5">
         {projectMissions.map((mission) => (
           <div key={mission.id} className="rounded-xl border border-gardenBorder bg-leaf-50 p-3">
-            <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[mission.stage]} showShortLabel />
+            <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[mission.stage]} showShortLabel />
             <p className="mt-3 text-sm font-bold leading-5 text-slateText">{mission.title.split(" - ")[1]}</p>
           </div>
         ))}
@@ -400,7 +400,7 @@ export function TeacherDashboardPage() {
       <EcoCard>
         <SectionTitle label="Progress Kelas Berdasarkan Sintaks EcoGrow" title="Status proyek aktif dan bukti belajar" description="Guru bisa melihat tahap EcoGrow yang sudah selesai, aktif, perlu review, dan terkunci sebelum memberi tindak lanjut." />
         <div className="mt-5">
-          <PancanitiStepper stages={projectOverview.stages} activeStage={activeProject.currentStage} />
+          <EcoGrowStepper stages={projectOverview.stages} activeStage={activeProject.currentStage} />
         </div>
       </EcoCard>
 
@@ -467,7 +467,7 @@ export function TeacherGuidePage() {
           <div className="mt-5 space-y-3">
             {Object.entries(stageLabel).map(([stage, label]) => (
               <div key={stage} className="rounded-xl bg-white/80 p-4">
-                <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[stage as PancanitiStage]} />
+                <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[stage as EcoGrowStage]} />
                 <p className="mt-2 text-sm font-semibold leading-6 text-mutedText">
                   {stage === "NITI_HARTI" ? "Mengenal dan mengamati." : stage === "NITI_SURTI" ? "Memahami dan memaknai." : stage === "NITI_BUKTI" ? "Membuktikan lewat aksi." : stage === "NITI_BAKTI" ? "Merefleksi dan mengamalkan." : "Menguasai dan memamerkan."}
                 </p>
@@ -610,7 +610,7 @@ function ModulePreview({
           <div className="mt-3 space-y-3">
             {draft.pancanitiPlan.map((step) => (
               <div key={step.stage} className="rounded-xl border border-gardenBorder bg-leaf-50 p-4">
-                <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[step.stage]} />
+                <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[step.stage]} />
                 <p className="mt-3 text-sm font-semibold leading-6 text-slateText">{step.teacherActivity}</p>
                 <p className="mt-2 text-xs font-bold leading-5 text-mutedText">Bukti: {step.assessmentEvidence}</p>
               </div>
@@ -759,7 +759,7 @@ function ProjectWizardMock() {
           <div className="mt-5 rounded-xl border border-leaf-500/25 bg-leaf-50 p-4">
             <p className="font-heading text-lg font-black text-leaf-700">Misi auto-generate untuk {latestProject.title}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {latestMissions.map((mission) => <EcoGrowStageBadge key={mission.id} stageId={legacyStageToEcoGrowStage[mission.stage]} />)}
+              {latestMissions.map((mission) => <EcoGrowStageBadge key={mission.id} stageId={stageIdToEcoGrowStage[mission.stage]} />)}
             </div>
           </div>
         ) : null}
@@ -1359,7 +1359,7 @@ function GalleryModerationBoard() {
                     : "Menunggu validasi"}
               </EcoBadge>
               <EcoBadge className="bg-sun/25 text-earth">{categoryLabel[post.category ?? "foto_tanaman"]}</EcoBadge>
-              {post.stage ? <EcoGrowStageBadge stageId={legacyStageToEcoGrowStage[post.stage]} /> : null}
+              {post.stage ? <EcoGrowStageBadge stageId={stageIdToEcoGrowStage[post.stage]} /> : null}
               {post.isFeatured ? <EcoBadge className="bg-sky/15 text-sky">Karya pilihan</EcoBadge> : null}
             </div>
             <h2 className="mt-4 font-heading text-2xl font-black text-leaf-700">{post.title}</h2>

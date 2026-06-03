@@ -1,10 +1,10 @@
 import { BookHeart, Compass, Eye, Sparkles, Sprout } from "lucide-react";
 import { studentJourneySteps } from "@/data";
 import { cn } from "@/lib/utils";
-import type { PancanitiStage } from "@/types/ecogrow";
+import type { EcoGrowStage } from "@/types/ecogrow";
 
 type EcoGrowJourneyStepperProps = {
-  activeStage: PancanitiStage;
+  activeStage: EcoGrowStage;
   compact?: boolean;
 };
 

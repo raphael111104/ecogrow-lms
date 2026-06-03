@@ -1,11 +1,13 @@
 export type UserRole = "teacher" | "student";
 
-export type PancanitiStage =
+export type EcoGrowStage =
   | "NITI_HARTI"
   | "NITI_SURTI"
   | "NITI_BUKTI"
   | "NITI_BAKTI"
   | "NITI_SAJATI";
+
+export type PancanitiStage = EcoGrowStage;
 
 export type MissionStatus = "locked" | "active" | "draft" | "submitted" | "reviewed" | "needs_revision" | "completed";
 
@@ -61,7 +63,7 @@ export interface SelectOption {
   name: string;
   totalStudents?: number;
   title?: string;
-  currentStage?: PancanitiStage;
+  currentStage?: EcoGrowStage;
 }
 
 export interface StudentTodayTask {
@@ -80,11 +82,11 @@ export interface StudentLearningFlowItem {
   href: string;
   status: FriendlyStatus;
   helperText: string;
-  stage?: PancanitiStage;
+  stage?: EcoGrowStage;
 }
 
 export interface StudentJourneyStep {
-  stage: PancanitiStage;
+  stage: EcoGrowStage;
   label: string;
   localTerm: string;
   detail: string;
@@ -219,7 +221,7 @@ export interface Evidence {
   title: string;
   description: string;
   imageUrl?: string;
-  stage?: PancanitiStage;
+  stage?: EcoGrowStage;
   status?: ReviewStatus;
 }
 
@@ -239,7 +241,7 @@ export interface EcoExhibitionItem {
 }
 
 export interface MissionStageProgress {
-  stage: PancanitiStage;
+  stage: EcoGrowStage;
   status: MissionStatus;
   evidence: string;
   feedback: string | null;
@@ -249,7 +251,7 @@ export interface PortfolioTimelineItem {
   date: string;
   title: string;
   evidence: string;
-  stage?: PancanitiStage;
+  stage?: EcoGrowStage;
 }
 
 export interface AssessmentMatrixItem {
@@ -315,7 +317,7 @@ export interface LearningModule {
   duration: string;
   description: string;
   learningOutcomes: string[];
-  pancanitiStages: PancanitiStage[];
+  ecoGrowStages: EcoGrowStage[];
   sdgs: string[];
 }
 
@@ -331,7 +333,7 @@ export interface EcoProject {
   progress: number;
   status: "planned" | "active" | "completed";
   description: string;
-  currentStage?: PancanitiStage;
+  currentStage?: EcoGrowStage;
   groupIds?: string[];
   riskLevel?: "low" | "medium" | "high";
 }
@@ -340,7 +342,7 @@ export interface EcoMission {
   id: string;
   projectId: string;
   title: string;
-  stage: PancanitiStage;
+  stage: EcoGrowStage;
   status: MissionStatus;
   points: number;
   instructions: string;
@@ -384,7 +386,7 @@ export interface LearningContent {
   durationMinute: number;
   summary: string;
   keywords: string[];
-  relatedStage: PancanitiStage;
+  relatedStage: EcoGrowStage;
   imageUrl?: string;
   essentialQuestion?: string;
 }
@@ -460,7 +462,7 @@ export interface GalleryPost {
   isFeatured?: boolean;
   teacherComment?: string;
   category?: GalleryCategory;
-  stage?: PancanitiStage;
+  stage?: EcoGrowStage;
 }
 
 export interface ReflectionEntry {
@@ -473,7 +475,7 @@ export interface ReflectionEntry {
   teamworkNote: string;
   ecologicalPromise: string;
   createdAt?: string;
-  relatedStage?: PancanitiStage;
+  relatedStage?: EcoGrowStage;
   kaihFocus?: KaihDimension[];
 }
 
@@ -516,7 +518,7 @@ export interface GeneratedModuleDraft {
   meaningfulUnderstanding: string;
   triggerQuestions: string[];
   pancanitiPlan: Array<{
-    stage: PancanitiStage;
+    stage: EcoGrowStage;
     teacherActivity: string;
     studentActivity: string;
     assessmentEvidence: string;
@@ -570,7 +572,7 @@ export type SoloLevel =
   | "Extended Abstract";
 
 export interface EcoGrowStageDisplay {
-  id: PancanitiStage;
+  id: EcoGrowStage;
   title: string;
   localTerm: string;
   shortAction: string;
@@ -633,7 +635,7 @@ export interface EcoGrowMeetingPlan {
   meeting: number;
   title: string;
   duration: string;
-  stageIds: PancanitiStage[];
+  stageIds: EcoGrowStage[];
   opening: string[];
   coreActivities: string[];
   closing: string[];
@@ -644,7 +646,7 @@ export interface EcoGrowQuestion {
   id: string;
   kind: EcoGrowAssessmentKind;
   format: EcoGrowQuestionFormat;
-  stageId?: PancanitiStage;
+  stageId?: EcoGrowStage;
   topic: string;
   question: string;
   options?: string[];
@@ -663,7 +665,7 @@ export interface EcoGrowQuestion {
 export interface EcoGrowLkpdSection {
   id: string;
   title: string;
-  stageId: PancanitiStage;
+  stageId: EcoGrowStage;
   instruction: string;
   fields: EcoGrowLkpdField[];
   evidenceRequired?: string[];

@@ -22,15 +22,17 @@ const tabs: Array<{ id: LearningTab; label: string; icon: typeof PlayCircle }> =
 ];
 
 export function EcoLearnPage() {
-  const topic = ecoLearnContents[0];
-  const check = ecoLearnChecks[0];
+  const [selectedTopicId, setSelectedTopicId] = useState(ecoLearnContents[0]?.id ?? "");
+  const topic = ecoLearnContents.find((item) => item.id === selectedTopicId) ?? ecoLearnContents[0];
+  const check =
+    ecoLearnChecks.find((item) => topic?.id.includes(item.id.replace("check-", ""))) ?? ecoLearnChecks[0];
   const [tab, setTab] = useState<LearningTab>("video");
   const [answer, setAnswer] = useState("");
 
   const feedback = answer
     ? answer === check.answer
-      ? { tone: "success" as const, title: "Benar! Daun menangkap cahaya.", description: check.feedback }
-      : { tone: "warning" as const, title: "Coba lagi.", description: "Perhatikan bagian hijau tanaman yang menghadap cahaya." }
+      ? { tone: "success" as const, title: "Benar! Kamu siap lanjut.", description: check.feedback }
+      : { tone: "warning" as const, title: "Coba lagi.", description: "Baca kartu konsepnya pelan-pelan, lalu pilih jawaban yang paling sesuai." }
     : null;
 
   return (
@@ -54,6 +56,34 @@ export function EcoLearnPage() {
           Mulai 3 Menit
         </EcoButton>
       </EcoCard>
+
+      <section>
+        <div className="flex gap-3 overflow-x-auto pb-2" aria-label="Pilih topik EcoLearn">
+          {ecoLearnContents.map((content) => (
+            <button
+              key={content.id}
+              type="button"
+              onClick={() => {
+                setSelectedTopicId(content.id);
+                setAnswer("");
+                setTab("read");
+              }}
+              className={`min-w-56 rounded-xl border p-4 text-left transition ${
+                content.id === topic.id
+                  ? "border-leaf-500 bg-leaf-50 shadow-soft"
+                  : "border-gardenBorder bg-white shadow-soft"
+              }`}
+            >
+              <span className="text-xs font-black uppercase tracking-[0.14em] text-earth">
+                {content.durationMinute} menit
+              </span>
+              <span className="mt-2 block font-heading text-lg font-black leading-tight text-leaf-700">
+                {content.title}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section>
         <div className="flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Isi belajar">
@@ -82,9 +112,9 @@ export function EcoLearnPage() {
               </div>
               <div>
                 <EcoBadge className="bg-sun/25 text-earth">3 menit</EcoBadge>
-                <h2 className="mt-3 font-heading text-2xl font-black text-leaf-700">Daun dan sinar matahari</h2>
+                <h2 className="mt-3 font-heading text-2xl font-black text-leaf-700">{topic.title}</h2>
                 <p className="mt-3 text-sm font-semibold leading-7 text-mutedText">
-                  Tonton bagaimana daun membantu tanaman membuat makanan menggunakan cahaya, air, dan udara.
+                  Amati contoh singkatnya, lalu lanjutkan ke bacaan dan kuis mini.
                 </p>
               </div>
             </div>
@@ -92,12 +122,12 @@ export function EcoLearnPage() {
           {tab === "read" ? (
             <div className="max-w-2xl">
               <EcoBadge className="bg-leaf-100 text-leaf-700">Bacaan 1 menit</EcoBadge>
-              <h2 className="mt-4 font-heading text-3xl font-black text-leaf-700">Daun seperti dapur kecil</h2>
+              <h2 className="mt-4 font-heading text-3xl font-black text-leaf-700">{topic.title}</h2>
               <p className="mt-4 text-base font-semibold leading-8 text-slateText">
-                Daun memakai cahaya matahari dan air untuk membantu tanaman membuat makanan. Karena itu, tanaman yang mendapat cukup cahaya biasanya terlihat lebih segar.
+                {topic.summary}
               </p>
               <p className="mt-4 rounded-2xl bg-cream p-4 font-bold text-earth">
-                Coba lihat: apakah daun tanamanmu menghadap ke arah cahaya?
+                {topic.essentialQuestion ?? "Apa yang bisa kamu amati dari topik ini?"}
               </p>
             </div>
           ) : null}
@@ -107,11 +137,13 @@ export function EcoLearnPage() {
                 <Image src={topic.imageUrl ?? "/assets/images/seedling-closeup-unsplash.jpg"} alt="Daun tanaman terkena cahaya" fill className="object-cover" />
               </div>
               <div>
-                <h2 className="font-heading text-2xl font-black text-leaf-700">Amati daunnya</h2>
+                <h2 className="font-heading text-2xl font-black text-leaf-700">Amati buktinya</h2>
                 <ul className="mt-4 space-y-3 text-sm font-bold text-slateText">
-                  <li className="rounded-xl bg-leaf-50 p-3">Warna hijau menunjukkan daun yang segar.</li>
-                  <li className="rounded-xl bg-leaf-50 p-3">Arah daun bisa mengikuti datangnya cahaya.</li>
-                  <li className="rounded-xl bg-leaf-50 p-3">Catat perubahan yang kamu lihat hari ini.</li>
+                  {topic.keywords.slice(0, 3).map((keyword) => (
+                    <li key={keyword} className="rounded-xl bg-leaf-50 p-3">
+                      Cari tanda tentang {keyword} pada tanaman atau kebun sekolahmu.
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

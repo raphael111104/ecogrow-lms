@@ -1,12 +1,12 @@
-import type { PancanitiStage } from "@/types/ecogrow";
+import type { EcoGrowStage as EcoGrowStageCode } from "@/types/ecogrow";
 import type {
   EcoGrowAssessmentRow,
-  EcoGrowStage,
+  EcoGrowStage as EcoGrowStageDefinition,
   EcoGrowStageId,
   TeacherStageAnalytic,
 } from "@/types/ecogrow-stage";
 
-export const legacyStageToEcoGrowStage: Record<PancanitiStage, EcoGrowStageId> = {
+export const stageIdToEcoGrowStage: Record<EcoGrowStageCode, EcoGrowStageId> = {
   NITI_HARTI: "recognition",
   NITI_SURTI: "exploration",
   NITI_BUKTI: "execution",
@@ -14,7 +14,9 @@ export const legacyStageToEcoGrowStage: Record<PancanitiStage, EcoGrowStageId> =
   NITI_SAJATI: "exhibition",
 };
 
-export const ecogrowStages: EcoGrowStage[] = [
+export const legacyStageToEcoGrowStage = stageIdToEcoGrowStage;
+
+export const ecogrowStages: EcoGrowStageDefinition[] = [
   {
     id: "recognition",
     order: 1,
@@ -156,13 +158,15 @@ export const ecoGrowAssessmentRows: EcoGrowAssessmentRow[] = [
 export const getEcoGrowStage = (stageId: EcoGrowStageId) =>
   ecogrowStages.find((stage) => stage.id === stageId) ?? ecogrowStages[0];
 
-export const getEcoGrowStageByLegacy = (stage: PancanitiStage) =>
-  getEcoGrowStage(legacyStageToEcoGrowStage[stage]);
+export const getEcoGrowStageByCode = (stage: EcoGrowStageCode) =>
+  getEcoGrowStage(stageIdToEcoGrowStage[stage]);
 
-export const getEcoGrowStageLabel = (stage: PancanitiStage) => {
-  const item = getEcoGrowStageByLegacy(stage);
+export const getEcoGrowStageByLegacy = getEcoGrowStageByCode;
+
+export const getEcoGrowStageLabel = (stage: EcoGrowStageCode) => {
+  const item = getEcoGrowStageByCode(stage);
   return `${item.title} (${item.localTerm})`;
 };
 
-export const getEcoGrowStageShortLabel = (stage: PancanitiStage) =>
-  getEcoGrowStageByLegacy(stage).shortLabel;
+export const getEcoGrowStageShortLabel = (stage: EcoGrowStageCode) =>
+  getEcoGrowStageByCode(stage).shortLabel;
