@@ -32,7 +32,7 @@ export function LearningContentSection() {
   const module = ecogrowTeachingModules[0];
 
   return (
-    <section className="relative overflow-hidden bg-leaf-50/60 py-24">
+    <section id="muatan" className="relative scroll-mt-28 overflow-hidden bg-leaf-50/60 py-24">
       <div className="eco-container space-y-14">
         <AnimatedSection>
           <div className="max-w-3xl">

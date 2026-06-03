@@ -191,7 +191,7 @@ export function EcoPlayPage() {
       {activeGame ? (
         <FriendlyAlert
           tone="success"
-          title={`${activeGame.title} siap dimainkan.`}
+          title={`Mode latihan dibuka: ${activeGame.title}`}
           description={
             activeMiniGame
               ? "Pilih jawabanmu langsung di Arena Latihan Mini."

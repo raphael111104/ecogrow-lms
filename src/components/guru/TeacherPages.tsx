@@ -71,6 +71,7 @@ import {
   studentLearningRisks,
   studentProfiles,
   teacherDashboardSummary,
+  teacherAnalyticsMock,
   teacherInsights,
   teacherStageAnalytics,
   teacherQuickActions,
@@ -1155,6 +1156,77 @@ export function TeacherAnalyticsPage() {
         <TeacherMetricCard label="Jurnal" value={String(analyticsSummary.totalJournals)} note="Total bukti Ecological Execution." icon={BookOpen} />
         <TeacherMetricCard label="Refleksi" value={String(analyticsSummary.totalReflections)} note="Cerita Belajarku." icon={Leaf} />
         <TeacherMetricCard label="Pengayaan" value="6" note="Siap tantangan Exhibition." icon={Award} />
+      </section>
+      <section className="grid gap-5 xl:grid-cols-2">
+        <EcoCard>
+          <SectionTitle label="Grafik pertumbuhan tanaman" title="Rata-rata tinggi kangkung kelas" description="Interpretasi: pertumbuhan stabil setelah jurnal air dan cahaya dicatat lebih konsisten." />
+          <div className="mt-5 space-y-3">
+            {teacherAnalyticsMock.plantGrowth.map((item) => (
+              <div key={item.day} className="grid grid-cols-[4.5rem_1fr_3rem] items-center gap-3 text-sm font-bold text-slateText">
+                <span>{item.day}</span>
+                <span className="h-3 overflow-hidden rounded-full bg-leaf-50">
+                  <span className="block h-full rounded-full bg-leaf-500" style={{ width: `${Math.min(100, item.averageHeight * 3)}%` }} />
+                </span>
+                <span className="text-right text-leaf-700">{item.averageHeight} cm</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 rounded-xl bg-leaf-50 p-3 text-sm font-bold leading-6 text-leaf-700">
+            Rekomendasi: minta kelompok membandingkan tinggi tanaman dengan volume air pada jurnal minggu ini.
+          </p>
+        </EcoCard>
+        <EcoCard>
+          <SectionTitle label="Distribusi badge" title="Motivasi dan capaian siswa" description="Interpretasi: badge perawatan tanaman paling banyak, sementara Eco Exhibitor perlu dipacu lewat galeri karya." />
+          <div className="mt-5 space-y-3">
+            {teacherAnalyticsMock.badgeDistribution.map((item) => (
+              <div key={item.badge} className="grid grid-cols-[1fr_3rem] items-center gap-3">
+                <div>
+                  <div className="flex justify-between gap-3 text-sm font-bold text-slateText">
+                    <span>{item.badge}</span>
+                    <span className="text-leaf-700">{item.count}</span>
+                  </div>
+                  <div className="mt-2 h-3 overflow-hidden rounded-full bg-leaf-50">
+                    <div className="h-full rounded-full bg-sun" style={{ width: `${Math.min(100, item.count * 7)}%` }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 rounded-xl bg-cream p-3 text-sm font-bold leading-6 text-earth">
+            Rekomendasi: aktifkan pameran karya untuk menaikkan badge Eco Exhibitor.
+          </p>
+        </EcoCard>
+        <EcoCard>
+          <SectionTitle label="Risiko belajar siswa" title="Aman, perlu perhatian, perlu pendampingan" description="Interpretasi: enam siswa perlu perhatian dan tiga siswa butuh pendampingan dekat." />
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {teacherAnalyticsMock.riskDistribution.map((item) => (
+              <div key={item.status} className="rounded-xl bg-leaf-50 p-4">
+                <p className="text-xs font-black uppercase tracking-wide text-mutedText">{item.status}</p>
+                <p className="mt-2 font-heading text-4xl font-black text-leaf-700">{item.count}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 rounded-xl bg-sun/25 p-3 text-sm font-bold leading-6 text-earth">
+            Rekomendasi: gunakan template feedback cepat untuk siswa yang belum lengkap jurnalnya.
+          </p>
+        </EcoCard>
+        <EcoCard>
+          <SectionTitle label="Progress tahap EcoGrow" title="Kenali sampai Pamerkan" description="Interpretasi: tahap Pamerkan masih rendah dan perlu dorongan Eco-Exhibition." />
+          <div className="mt-5 space-y-3">
+            {teacherAnalyticsMock.stageProgress.map((item) => (
+              <div key={item.stage} className="grid grid-cols-[5rem_1fr_2.5rem] items-center gap-3 text-sm font-bold text-slateText">
+                <span>{item.stage}</span>
+                <span className="h-3 overflow-hidden rounded-full bg-leaf-50">
+                  <span className="block h-full rounded-full bg-sky" style={{ width: `${Math.min(100, item.count * 4)}%` }} />
+                </span>
+                <span className="text-right text-leaf-700">{item.count}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 rounded-xl bg-leaf-50 p-3 text-sm font-bold leading-6 text-leaf-700">
+            Rekomendasi: pilih tiga karya galeri untuk dipersiapkan sebagai pameran kelas.
+          </p>
+        </EcoCard>
       </section>
       <EcoCard>
         <SectionTitle label="Distribusi progres per tahap EcoGrow" title="Skor, tren, stagnasi, dan kebutuhan pendampingan" description="Mock analitik menunjukkan rata-rata skor per tahap, penyelesaian EcoMission, siswa stagnan, serta tahap dengan kebutuhan pendampingan tertinggi." />

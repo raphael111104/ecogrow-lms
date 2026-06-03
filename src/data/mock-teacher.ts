@@ -56,6 +56,16 @@ export const teacherQuickFeedbackTemplates: TeacherQuickFeedbackTemplate[] = [
     message: "Kerja samamu dengan tim sudah terlihat baik. Pertahankan pembagian tugasnya.",
     focus: "apresiasi_tim",
   },
+  {
+    id: "feedback-compare-growth",
+    message: "Coba bandingkan tinggi tanaman hari ini dengan minggu lalu.",
+    focus: "pertanyaan",
+  },
+  {
+    id: "feedback-water-care",
+    message: "Gunakan air secukupnya dan catat perubahan setelahnya.",
+    focus: "perbaikan",
+  },
 ];
 
 export const teacherActionQueue = [
@@ -255,6 +265,34 @@ export const analyticsSummary = {
   },
 };
 
+export const teacherAnalyticsMock = {
+  plantGrowth: [
+    { day: "Hari 1", averageHeight: 6 },
+    { day: "Hari 3", averageHeight: 10 },
+    { day: "Hari 5", averageHeight: 16 },
+    { day: "Hari 7", averageHeight: 23 },
+    { day: "Hari 10", averageHeight: 29 },
+  ],
+  badgeDistribution: [
+    { badge: "Penjaga Tanaman", count: 12 },
+    { badge: "Sahabat Daun", count: 9 },
+    { badge: "Eco Exhibitor", count: 5 },
+    { badge: "Ahli Tanaman Muda", count: 7 },
+  ],
+  riskDistribution: [
+    { status: "Aman", count: 16 },
+    { status: "Perlu Perhatian", count: 6 },
+    { status: "Perlu Pendampingan", count: 3 },
+  ],
+  stageProgress: [
+    { stage: "Kenali", count: 25 },
+    { stage: "Jelajahi", count: 24 },
+    { stage: "Aksi", count: 20 },
+    { stage: "Refleksi", count: 14 },
+    { stage: "Pamerkan", count: 5 },
+  ],
+};
+
 export const studentLearningRisks = [
   {
     studentId: "siswa-5",
@@ -289,8 +327,9 @@ export const assessmentTabs = [
   { id: "diagnostic", label: "Diagnostik", description: "Memetakan kesiapan awal siswa." },
   { id: "formative", label: "Formatif", description: "Memberi umpan balik selama misi." },
   { id: "summative", label: "Sumatif", description: "Mengukur capaian akhir proyek." },
-  { id: "performance", label: "Rubrik Kinerja", description: "Meninjau bukti praktik dan karya Eco-Exhibition." },
+  { id: "reflection", label: "Refleksi", description: "Meninjau Cerita Belajarku, janji aksi, dan apresiasi teman." },
   { id: "character", label: "KAIH", description: "Membaca perkembangan karakter ekologis siswa." },
+  { id: "performance", label: "Rubrik Kinerja", description: "Meninjau bukti praktik dan karya Eco-Exhibition." },
 ] as const;
 
 export const teacherAssessmentFollowUps = [

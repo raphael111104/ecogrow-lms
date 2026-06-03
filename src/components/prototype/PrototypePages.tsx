@@ -832,6 +832,12 @@ const challengeStatusLabels: Record<EcoChallenge["status"], string> = {
   approved: "Disetujui",
 };
 
+const challengeTypeLabels: Record<NonNullable<EcoChallenge["type"]>, string> = {
+  remedial: "Latihan ulang",
+  enrichment: "Tantangan lanjutan",
+  habit: "Kebiasaan hijau",
+};
+
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
     <div className="rounded-xl border border-dashed border-leaf-500/30 bg-leaf-50/70 p-5 text-center">
@@ -2121,7 +2127,14 @@ export function EcoChallengePage() {
                     <img src={challenge.imageUrl} alt={challenge.title} className="h-full w-full object-cover" />
                   </div>
                 ) : null}
-                <EcoBadge className="bg-leaf-100 text-leaf-700">{challengeStatusLabels[challenge.status]}</EcoBadge>
+                <div className="flex flex-wrap gap-2">
+                  <EcoBadge className="bg-leaf-100 text-leaf-700">{challengeStatusLabels[challenge.status]}</EcoBadge>
+                  {challenge.type ? (
+                    <EcoBadge className={challenge.type === "remedial" ? "bg-sun/25 text-earth" : challenge.type === "enrichment" ? "bg-sky/15 text-sky" : "bg-white text-mutedText"}>
+                      {challengeTypeLabels[challenge.type]}
+                    </EcoBadge>
+                  ) : null}
+                </div>
                 <h2 className="mt-4 font-heading text-2xl font-black text-leaf-700">{challenge.title}</h2>
                 <p className="mt-2 text-sm leading-6 text-mutedText">{challenge.description}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
