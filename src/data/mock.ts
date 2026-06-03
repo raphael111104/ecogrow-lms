@@ -567,6 +567,7 @@ export const quizAttemptsMock: QuizAttempt[] = [
 export const ecoChallenges: EcoChallenge[] = [
   {
     id: "challenge-1",
+    type: "habit",
     title: "Hemat Air Saat Menyiram",
     description: "Gunakan air secukupnya saat merawat tanaman di rumah.",
     durationDays: 3,
@@ -580,6 +581,7 @@ export const ecoChallenges: EcoChallenge[] = [
   },
   {
     id: "challenge-2",
+    type: "enrichment",
     title: "Pilah Sampah Organik",
     description: "Pisahkan sisa daun atau kulit buah untuk belajar kompos.",
     durationDays: 2,
@@ -590,6 +592,34 @@ export const ecoChallenges: EcoChallenge[] = [
     imageUrl: ecoImages.agricultureField,
     parentPrompt: "Ajak keluarga memilih sisa daun atau kulit buah yang aman untuk belajar kompos.",
     evidenceHint: "Kirim foto pilahan organik dan cerita singkat tempat sampahnya.",
+  },
+  {
+    id: "challenge-remedial-light",
+    type: "remedial",
+    title: "Latihan Ulang: Cahaya dan Tanaman",
+    description: "Amati satu tanaman di rumah. Catat apakah tanaman mendapat cahaya cukup.",
+    durationDays: 1,
+    rewardPoints: 30,
+    status: "not_started",
+    kaihFocus: ["ekologis", "mandiri"],
+    tasks: ["Foto tanaman di dekat sumber cahaya", "Catat apakah daunnya segar atau layu", "Tulis satu perbaikan yang bisa dicoba"],
+    imageUrl: ecoImages.seedlingCloseup,
+    parentPrompt: "Ajak keluarga melihat apakah tanaman mendapat cahaya pagi atau siang.",
+    evidenceHint: "Kirim foto tanaman dan catatan lokasi cahayanya.",
+  },
+  {
+    id: "challenge-water-saving",
+    type: "habit",
+    title: "Hemat Air 3 Hari",
+    description: "Catat satu kebiasaan menghemat air selama tiga hari.",
+    durationDays: 3,
+    rewardPoints: 35,
+    status: "not_started",
+    kaihFocus: ["ekologis", "mandiri"],
+    tasks: ["Pilih satu kebiasaan hemat air", "Catat selama tiga hari", "Tulis janji aksi hijau"],
+    imageUrl: ecoImages.gardeningActivity,
+    parentPrompt: "Orang tua boleh memberi paraf jika kebiasaan hemat air dilakukan.",
+    evidenceHint: "Kirim catatan harian singkat dan janji aksi.",
   },
 ];
 

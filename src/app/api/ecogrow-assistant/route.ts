@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   appendContinuationRequest,
   buildAssistantReply,
+  getAssistantFallbackReply,
   sanitizeMessages,
   type GeminiContent,
   type GeminiResponse,
@@ -135,13 +136,6 @@ export async function POST(request: Request) {
   const fallbackModels = ["gemini-2.5-flash", "gemini-2.0-flash"];
   const models = Array.from(new Set([preferredModel, ...fallbackModels]));
 
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "Konfigurasi Gemini belum tersedia di server." },
-      { status: 500 },
-    );
-  }
-
   try {
     const body = (await request.json()) as { messages?: IncomingAssistantMessage[] };
     const messages = Array.isArray(body.messages) ? sanitizeMessages(body.messages) : [];
@@ -153,29 +147,26 @@ export async function POST(request: Request) {
       );
     }
 
-    let lastError = "Gemini belum bisa menjawab saat ini. Coba lagi beberapa saat.";
+    if (!apiKey) {
+      return NextResponse.json({ reply: getAssistantFallbackReply(messages), mode: "fallback" });
+    }
 
     for (const model of models) {
       const result = await generateAssistantReply({ apiKey, model, messages });
 
       if (!result.ok) {
-        lastError = result.error || lastError;
-
         if (result.status === 404 && model !== models.at(-1)) {
           continue;
         }
 
-        return NextResponse.json({ error: lastError }, { status: result.status });
+        return NextResponse.json({ reply: getAssistantFallbackReply(messages), mode: "fallback" });
       }
 
       return NextResponse.json({ reply: result.reply });
     }
 
-    return NextResponse.json({ error: lastError }, { status: 502 });
+    return NextResponse.json({ reply: getAssistantFallbackReply(messages), mode: "fallback" });
   } catch {
-    return NextResponse.json(
-      { error: "Terjadi kendala saat menghubungi EcoGrow Assistant." },
-      { status: 500 },
-    );
+    return NextResponse.json({ reply: getAssistantFallbackReply([]), mode: "fallback" });
   }
 }

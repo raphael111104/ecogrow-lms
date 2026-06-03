@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   buildAssistantReply,
+  getAssistantFallbackReply,
   hasIncompleteFinishReason,
 } from "./ecogrow-assistant.ts";
 
@@ -46,4 +47,21 @@ test("hasIncompleteFinishReason catches token and length based stops", () => {
   assert.equal(hasIncompleteFinishReason("MAX_TOKENS"), true);
   assert.equal(hasIncompleteFinishReason("STOP"), false);
   assert.equal(hasIncompleteFinishReason(undefined), false);
+});
+
+test("getAssistantFallbackReply answers EcoGrow topics locally", () => {
+  const reply = getAssistantFallbackReply([
+    { role: "user", content: "Apa itu EcoMission dan jurnal siswa?" },
+  ]);
+
+  assert.match(reply, /EcoMission/);
+  assert.match(reply, /feedback dari guru/);
+});
+
+test("getAssistantFallbackReply keeps unrelated topics out of scope", () => {
+  const reply = getAssistantFallbackReply([
+    { role: "user", content: "Berapa harga tiket konser hari ini?" },
+  ]);
+
+  assert.match(reply, /hanya bisa membantu seputar EcoGrow Learning/);
 });

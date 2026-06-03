@@ -412,6 +412,7 @@ export interface QuizAttempt {
 
 export interface EcoChallenge {
   id: string;
+  type?: "remedial" | "enrichment" | "habit";
   title: string;
   description: string;
   durationDays: number;

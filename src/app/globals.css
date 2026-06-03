@@ -14,6 +14,8 @@
   --earth: #9a6b3f;
   --cream: #fff8e7;
   --border: #d9e8dd;
+  --font-landing-body: "Nunito Sans", "Trebuchet MS", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-landing-heading: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -52,6 +54,24 @@ textarea {
 
 .font-heading {
   font-family: var(--font-heading, "Segoe UI"), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.landing-typography {
+  font-family: var(--font-landing-body);
+  letter-spacing: 0.002em;
+}
+
+.landing-typography .font-heading,
+.landing-typography h1,
+.landing-typography h2,
+.landing-typography h3 {
+  font-family: var(--font-landing-heading);
+  letter-spacing: 0;
+}
+
+.landing-typography .text-xs.uppercase,
+.landing-typography [class*="tracking-"][class*="uppercase"] {
+  font-family: var(--font-landing-body);
 }
 
 .hero-headline {

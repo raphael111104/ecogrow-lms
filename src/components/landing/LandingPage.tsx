@@ -10,10 +10,11 @@ import { MissionSection } from "./MissionSection";
 import { Navbar } from "./Navbar";
 import { ProblemSolutionSection } from "./ProblemSolutionSection";
 import { SDGsSection } from "./SDGsSection";
+import { SystemEligibilitySection } from "./SystemEligibilitySection";
 
 export function LandingPage() {
   return (
-    <div className="page-shell-bg overflow-hidden">
+    <div className="landing-typography page-shell-bg overflow-hidden">
       <Navbar />
       <main>
         <HeroSection />
@@ -21,6 +22,7 @@ export function LandingPage() {
         <KonsepSection />
         <PancanitiSection />
         <FiturSection />
+        <SystemEligibilitySection />
         <MissionSection />
         <ImpactSection />
         <LearningContentSection />

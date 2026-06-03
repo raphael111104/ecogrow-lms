@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { LoadingState, UnauthorizedState } from "@/components/ui/AppState";
 import { getAuthSession } from "@/lib/auth";
 import type { AuthSession, UserRole } from "@/types/ecogrow";
@@ -11,32 +12,28 @@ type ProtectedRouteProps = {
   children: ReactNode;
 };
 
-function createDemoSession(role: UserRole): AuthSession {
-  return {
-    role,
-    status: "authenticated",
-    expiresAt: "2099-12-31T23:59:59.000Z",
-    user: {
-      id: `${role}-demo-fallback`,
-      name: role === "teacher" ? "Bu Rani" : "Adit",
-      role,
-    },
-  };
-}
-
 export function ProtectedRoute({ allowedRoles, children }: ProtectedRouteProps) {
-  const fallbackRole = allowedRoles[0];
-  const [session, setSession] = useState<AuthSession | null>(() => createDemoSession(fallbackRole));
-  const [checked, setChecked] = useState(true);
+  const pathname = usePathname();
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const currentSession = getAuthSession();
-    setSession(currentSession ?? createDemoSession(fallbackRole));
+    setSession(getAuthSession());
     setChecked(true);
-  }, [fallbackRole]);
+  }, []);
 
-  if (!checked || !session) {
+  if (!checked) {
     return <LoadingState title="Memeriksa sesi" description="EcoGrow sedang memastikan akses pengguna." />;
+  }
+
+  if (!session) {
+    return (
+      <UnauthorizedState
+        description="Silakan masuk sebagai Guru atau Peserta Didik sebelum membuka ruang belajar."
+        actionHref={`/login?next=${encodeURIComponent(pathname)}`}
+        actionLabel="Masuk EcoGrow"
+      />
+    );
   }
 
   if (!allowedRoles.includes(session.role)) {
