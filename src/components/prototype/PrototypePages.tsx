@@ -55,6 +55,7 @@ import {
   getEcoGrowStageLabel,
   groupProgress,
   harvestImpactSummary,
+  harvestRecords,
   harvests,
   journals,
   learningModules,
@@ -1661,6 +1662,35 @@ export function EcoPlayPage() {
 
 export function EcomartPage() {
   const totalKg = harvestImpactSummary.totalVegetableKg;
+  const [records, setRecords] = useStoredList("ecogrow-harvest-records", harvestRecords);
+  const [recordForm, setRecordForm] = useState({
+    groupName: "Tim Tunas Hijau",
+    cropName: "Kangkung",
+    amount: "1.0",
+    unit: "kg",
+    usage: "Demo pangan sehat kelas",
+  });
+  const [recordToast, setRecordToast] = useState("");
+
+  const updateRecordForm = (field: keyof typeof recordForm, value: string) => {
+    setRecordForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const addHarvestRecord = () => {
+    const amount = Number(recordForm.amount) || 0;
+    const next = {
+      id: `harvest-local-${Date.now()}`,
+      groupName: recordForm.groupName,
+      cropName: recordForm.cropName,
+      amount,
+      unit: recordForm.unit,
+      usage: recordForm.usage,
+      points: Math.max(20, Math.round(amount * 50)),
+      date: "2026-05-30",
+    };
+    setRecords([next, ...records]);
+    setRecordToast("Catatan panen tersimpan. EcoPoint panen masuk sebagai simulasi kontribusi pangan sehat.");
+  };
 
   return (
     <div className="living-page mx-auto max-w-7xl space-y-6">
@@ -1682,6 +1712,33 @@ export function EcomartPage() {
           "Tulis cerita singkat tentang panen.",
         ]}
       />
+      <EcoCard tone="cream">
+        <SectionTitle eyebrow="Catat panen" title="Rekam hasil dan kontribusi pangan sehat" description="Tambahkan catatan panen mock agar hasil kebun terlihat sebagai evidence belajar." />
+        <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_0.9fr_0.45fr_0.45fr_1.2fr_auto] lg:items-end">
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Kelompok
+            <input className={inputClass} value={recordForm.groupName} onChange={(event) => updateRecordForm("groupName", event.target.value)} />
+          </label>
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Hasil panen
+            <input className={inputClass} value={recordForm.cropName} onChange={(event) => updateRecordForm("cropName", event.target.value)} />
+          </label>
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Jumlah
+            <input className={inputClass} inputMode="decimal" value={recordForm.amount} onChange={(event) => updateRecordForm("amount", event.target.value)} />
+          </label>
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Satuan
+            <input className={inputClass} value={recordForm.unit} onChange={(event) => updateRecordForm("unit", event.target.value)} />
+          </label>
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Tujuan penggunaan
+            <input className={inputClass} value={recordForm.usage} onChange={(event) => updateRecordForm("usage", event.target.value)} />
+          </label>
+          <EcoButton variant="reward" onClick={addHarvestRecord}>Catat</EcoButton>
+        </div>
+        <div className="mt-4"><ToastMessage message={recordToast} /></div>
+      </EcoCard>
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {harvests.map((harvest) => (
           <EcoCard key={harvest.id} tone="cream">
@@ -1702,6 +1759,20 @@ export function EcomartPage() {
       </section>
       <EcoCard>
         <SectionTitle eyebrow="Dampak pangan sehat" title="Catatan kontribusi kelas" description={harvestImpactSummary.contributionText} />
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          {records.map((record) => (
+            <div key={record.id} className="rounded-xl border border-gardenBorder bg-leaf-50 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-heading text-lg font-black text-leaf-700">{record.cropName}</p>
+                  <p className="mt-1 text-sm font-bold text-mutedText">{record.groupName} - {record.date}</p>
+                </div>
+                <EcoBadge className="bg-sun/25 text-earth">{record.points} EcoPoint</EcoBadge>
+              </div>
+              <p className="mt-2 text-sm font-semibold leading-6 text-slateText">{record.amount} {record.unit} - {record.usage}</p>
+            </div>
+          ))}
+        </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           {["Apa yang kamu pelajari dari proses panen?", "Bagaimana hasil panen membantu sekolah?"].map((question) => (
             <label key={question} className="block space-y-2 text-sm font-extrabold text-mutedText">

@@ -25,6 +25,7 @@ const exhibitionTypeLabel = {
   photo: "Foto pengamatan",
   poster: "Poster",
   story: "Cerita",
+  report: "Laporan proyek",
   harvest_report: "Laporan panen",
 };
 
@@ -159,7 +160,23 @@ export function TeacherGalleryPage() {
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.13em] text-mutedText">Pemilik</p>
                 <p className="mt-1 text-sm font-bold text-slateText">{selectedCandidate.studentName}</p>
+                {selectedCandidate.groupName ? <p className="mt-1 text-xs font-bold text-mutedText">{selectedCandidate.groupName}</p> : null}
               </div>
+            </div>
+          ) : null}
+          {selectedCandidate?.mainMessage ? (
+            <div className="mt-4 rounded-2xl bg-white p-4">
+              <p className="text-xs font-black uppercase tracking-[0.13em] text-mutedText">Pesan Utama</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-slateText">{selectedCandidate.mainMessage}</p>
+              {selectedCandidate.evidence?.length ? (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {selectedCandidate.evidence.map((item) => (
+                    <EcoBadge key={item} className="bg-leaf-100 text-leaf-700">
+                      {item}
+                    </EcoBadge>
+                  ))}
+                </div>
+              ) : null}
             </div>
           ) : null}
           {selected.teacherComment ? (

@@ -1,17 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { Award, BookHeart, Camera, CheckCircle2, HeartHandshake, Leaf, MessageCircleMore, Trophy } from "lucide-react";
+import { Award, BarChart3, BookHeart, Camera, CheckCircle2, ClipboardCheck, Gamepad2, HeartHandshake, Leaf, MessageCircleMore, Sprout, Trophy } from "lucide-react";
 import { EcoGrowJourneyStepper } from "@/components/student/EcoGrowJourneyStepper";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { NextSuggestedActionCard } from "@/components/shared/NextSuggestedActionCard";
 import { EcoBadge } from "@/components/ui/EcoBadge";
 import { EcoButton } from "@/components/ui/EcoButton";
 import { EcoCard } from "@/components/ui/EcoCard";
-import { studentMoodOptions } from "@/data";
+import { ecoChallenges, ecoExhibitionItems, ecoPlayGames, studentMoodOptions } from "@/data";
 import { useMockStorage } from "@/hooks/useMockStorage";
 import { getStudentDashboardMock, getStudentMissionMock, getStudentPortfolioMock } from "@/mock/repositories/studentRepository";
-import type { StudentReflectionMemory } from "@/types/ecogrow";
+import type { EcoMasterResult, EcoReadinessResult, StudentReflectionMemory } from "@/types/ecogrow";
 
 export function PortfolioPage() {
   const dashboard = getStudentDashboardMock();
@@ -19,8 +19,38 @@ export function PortfolioPage() {
   const portfolio = getStudentPortfolioMock();
   const album = mission.journals.slice(-3).reverse();
   const [reflectionMemory] = useMockStorage<StudentReflectionMemory | null>("ecoGrow-reflection-memory", null);
+  const [readinessResult] = useMockStorage<EcoReadinessResult | null>("ecoGrow-readiness-result", null);
+  const [masterResult] = useMockStorage<EcoMasterResult | null>("ecoGrow-ecomaster-results", null);
   const latestReflection = portfolio.reflections[0];
   const moodLabel = studentMoodOptions.find((mood) => mood.id === reflectionMemory?.mood)?.label;
+  const kaihEntries = Object.entries(dashboard.profile.ecologicalCharacter);
+  const approvedExhibitions = ecoExhibitionItems.filter((item) => item.status === "approved");
+  const evidenceCards = [
+    {
+      label: "Kuis Awal",
+      value: readinessResult ? `${readinessResult.score}` : "Mock",
+      note: readinessResult?.recommendation ?? "Memetakan minat, gaya belajar, dan kesiapan ekologis.",
+      icon: ClipboardCheck,
+    },
+    {
+      label: "EcoMission",
+      value: `${mission.journals.length} jurnal`,
+      note: "Pengamatan tinggi tanaman, daun, air, dan foto praktik.",
+      icon: Sprout,
+    },
+    {
+      label: "EcoPlay",
+      value: `${ecoPlayGames.length} game`,
+      note: "Latihan fotosintesis, puzzle alur, dan detektif tanaman layu.",
+      icon: Gamepad2,
+    },
+    {
+      label: "Kuis Akhir",
+      value: masterResult ? `${masterResult.score}` : `${portfolio.quizAttempts[0]?.score ?? 80}`,
+      note: masterResult?.recommendation ?? portfolio.quizAttempts[0]?.recommendation ?? "Menguatkan konsep dan rekomendasi lanjut.",
+      icon: Trophy,
+    },
+  ];
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -67,6 +97,21 @@ export function PortfolioPage() {
           ))}
         </div>
       </EcoCard>
+
+      <section>
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Evidence Belajar</p>
+        <h2 className="mt-2 font-heading text-2xl font-black text-leaf-700">Jejak dari kuis, misi, game, dan karya</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {evidenceCards.map(({ label, value, note, icon: Icon }) => (
+            <EcoCard key={label} tone="soft" className="p-4">
+              <Icon className="size-7 text-leaf-600" aria-hidden="true" />
+              <p className="mt-3 text-xs font-black uppercase tracking-[0.13em] text-mutedText">{label}</p>
+              <p className="mt-1 font-heading text-2xl font-black text-leaf-700">{value}</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-slateText">{note}</p>
+            </EcoCard>
+          ))}
+        </div>
+      </section>
 
       <section>
         <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Album Tanamanku</p>
@@ -178,6 +223,69 @@ export function PortfolioPage() {
           </div>
         </EcoCard>
       </section>
+      <section className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
+        <EcoCard tone="soft">
+          <div className="flex items-center gap-3">
+            <Trophy className="size-7 text-leaf-700" aria-hidden="true" />
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">EcoChallenge</p>
+              <h2 className="font-heading text-2xl font-black text-leaf-700">Remedial, pengayaan, dan kebiasaan baik</h2>
+            </div>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {ecoChallenges.slice(0, 3).map((challenge) => (
+              <div key={challenge.id} className="rounded-2xl bg-white p-4">
+                <EcoBadge className="bg-leaf-100 text-leaf-700">{challenge.type ?? "habit"}</EcoBadge>
+                <p className="mt-3 font-heading text-lg font-black text-leaf-700">{challenge.title}</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-mutedText">{challenge.rewardPoints} EcoPoint - {challenge.evidenceHint}</p>
+              </div>
+            ))}
+          </div>
+        </EcoCard>
+        <EcoCard tone="cream">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="size-7 text-harvest" aria-hidden="true" />
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-earth">KAIH</p>
+              <h2 className="font-heading text-2xl font-black text-leaf-700">Karakter ekologis</h2>
+            </div>
+          </div>
+          <div className="mt-4 space-y-3">
+            {kaihEntries.map(([dimension, value]) => (
+              <div key={dimension} className="rounded-xl bg-white p-3">
+                <div className="flex items-center justify-between gap-3 text-sm font-black">
+                  <span className="capitalize text-slateText">{dimension}</span>
+                  <span className="text-leaf-700">{value}</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-leaf-100">
+                  <span className="block h-full rounded-full bg-leaf-500" style={{ width: `${value}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </EcoCard>
+      </section>
+      <EcoCard tone="soft">
+        <div className="flex items-center gap-3">
+          <Camera className="size-7 text-leaf-700" aria-hidden="true" />
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Eco-Exhibition</p>
+            <h2 className="font-heading text-2xl font-black text-leaf-700">Karya yang sudah disetujui</h2>
+          </div>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {approvedExhibitions.map((item) => (
+            <div key={item.id} className="rounded-2xl bg-white p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <EcoBadge className="bg-sun/25 text-earth">{item.badgeCandidate}</EcoBadge>
+                {item.groupName ? <EcoBadge className="bg-leaf-100 text-leaf-700">{item.groupName}</EcoBadge> : null}
+              </div>
+              <p className="mt-3 font-heading text-xl font-black text-leaf-700">{item.title}</p>
+              {item.mainMessage ? <p className="mt-2 text-sm font-semibold leading-6 text-mutedText">{item.mainMessage}</p> : null}
+            </div>
+          ))}
+        </div>
+      </EcoCard>
       <EcoCard tone="dark" className="flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-sun">Pamerkan Karya</p>

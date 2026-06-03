@@ -40,6 +40,9 @@ test("getRecommendationByScore maps remedial, standard, and enrichment threshold
   assert.equal(assessmentUtils.getRecommendationByScore(69).type, "remedial");
   assert.equal(assessmentUtils.getRecommendationByScore(70).type, "standard");
   assert.equal(assessmentUtils.getRecommendationByScore(85).type, "enrichment");
+  assert.equal(typeof assessmentUtils.getEcoMasterRecommendation, "function", "EcoMaster recommendation utility must exist");
+  assert.equal(assessmentUtils.getEcoMasterRecommendation(69).nextHref, "/siswa/ecolearn");
+  assert.equal(assessmentUtils.getEcoMasterRecommendation(85).nextHref, "/siswa/galeri");
 });
 
 test("assessment package exposes diagnostic, formative, summative, HOTS, and deep SOLO items", () => {
@@ -48,7 +51,8 @@ test("assessment package exposes diagnostic, formative, summative, HOTS, and dee
   const { diagnostic, formative, summative } = assessmentData.ecogrowAssessmentPackage;
   assert.equal(diagnostic.questions.length, 8);
   assert.equal(formative.questions.length, 6);
-  assert.equal(summative.questions.length, 8);
+  assert.ok(summative.questions.length >= 10);
+  assert.ok(summative.questions.filter((question) => question.format === "single_choice").length >= 10);
   assert.ok(assessmentUtils.countHotsQuestions(summative.questions) >= 6);
   assert.ok(assessmentUtils.countSoloDeepQuestions(summative.questions) >= 8);
 });

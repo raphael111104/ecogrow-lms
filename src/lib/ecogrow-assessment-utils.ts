@@ -43,6 +43,31 @@ export function getRecommendationByScore(score: number) {
   };
 }
 
+export function getEcoMasterRecommendation(score: number) {
+  if (score >= 85) {
+    return {
+      label: "Tantangan Lanjutan",
+      message: "Kamu siap membuat karya Eco-Exhibition dengan data pertumbuhan tanaman.",
+      nextHref: "/siswa/galeri",
+      actionLabel: "Pamerkan Karya",
+    };
+  }
+  if (score >= 70) {
+    return {
+      label: "Lanjutkan Portofolio",
+      message: "Kamu sudah paham dasar EcoGrow. Lanjutkan refleksi dan album belajarmu.",
+      nextHref: "/siswa/portofolio",
+      actionLabel: "Buka Album",
+    };
+  }
+  return {
+    label: "Latihan Ulang",
+    message: "Coba ulangi materi cahaya, air, hidroponik, dan fotosintesis di EcoLearn.",
+    nextHref: "/siswa/ecolearn",
+    actionLabel: "Belajar Lagi",
+  };
+}
+
 export function countHotsQuestions(questions: EcoGrowQuestion[]) {
   return questions.filter((question) => ["C4", "C5", "C6"].includes(question.bloomLevel ?? "")).length;
 }

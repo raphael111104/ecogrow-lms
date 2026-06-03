@@ -9,9 +9,12 @@ import { EcoBadge } from "@/components/ui/EcoBadge";
 import { EcoButton } from "@/components/ui/EcoButton";
 import { EcoCard } from "@/components/ui/EcoCard";
 import { studentJourneySteps, studentLearningReport } from "@/data";
+import { useMockStorage } from "@/hooks/useMockStorage";
+import type { EcoMasterResult } from "@/types/ecogrow";
 
 export function StudentLearningReportPage() {
   const [documentNotice, setDocumentNotice] = useState<{ title: string; description: string } | null>(null);
+  const [masterResult] = useMockStorage<EcoMasterResult | null>("ecoGrow-ecomaster-results", null);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -63,6 +66,24 @@ export function StudentLearningReportPage() {
             {studentLearningReport.completedJourneySteps} langkah sudah selesai
           </EcoBadge>
         </div>
+      </EcoCard>
+
+      <EcoCard tone="soft" className="grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
+        <span className="grid size-14 place-items-center rounded-2xl bg-leaf-100 text-leaf-700">
+          <BookOpenCheck className="size-7" aria-hidden="true" />
+        </span>
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Kuis Akhir EcoMaster</p>
+          <h2 className="mt-1 font-heading text-2xl font-black text-leaf-700">
+            {masterResult ? `${masterResult.correct}/${masterResult.total} jawaban tepat` : "Belum ada hasil tersimpan"}
+          </h2>
+          <p className="mt-2 text-sm font-semibold leading-6 text-slateText">
+            {masterResult?.recommendation ?? "Selesaikan Kuis Akhir agar rekomendasi remedial atau pengayaan tampil di laporan."}
+          </p>
+        </div>
+        <EcoBadge className="bg-white text-leaf-700">
+          {masterResult ? `${masterResult.score}` : "Menunggu"}
+        </EcoBadge>
       </EcoCard>
 
       <EcoCard>

@@ -233,9 +233,13 @@ export interface QuizFeedbackBank {
 export interface EcoExhibitionItem {
   id: string;
   studentName: string;
+  groupName?: string;
   title: string;
-  type: "poster" | "story" | "photo" | "harvest_report";
+  type: "poster" | "story" | "photo" | "report" | "harvest_report";
+  stageId?: EcoGrowStage;
   status: "waiting_review" | "approved" | "revision";
+  mainMessage?: string;
+  evidence?: string[];
   badgeCandidate: string;
   sourcePostId?: string;
 }

@@ -11,7 +11,7 @@ import { EcoCard } from "@/components/ui/EcoCard";
 import { EcoProgress } from "@/components/ui/EcoProgress";
 import { ecoMasterSummativeQuestions, quizFeedback } from "@/data";
 import { useMockStorage } from "@/hooks/useMockStorage";
-import { calculateSingleChoiceScore } from "@/lib/ecogrow-assessment-utils";
+import { calculateSingleChoiceScore, getEcoMasterRecommendation } from "@/lib/ecogrow-assessment-utils";
 import type { EcoMasterResult } from "@/types/ecogrow";
 
 export function EcoMasterAssessmentPage() {
@@ -29,15 +29,14 @@ export function EcoMasterAssessmentPage() {
 
   const finishQuiz = () => {
     const score = calculateSingleChoiceScore(questions, answers);
+    const recommendation = getEcoMasterRecommendation(score.score);
     setResult({
       score: score.score,
       correct: score.correct,
       total: score.total,
       answers,
-      recommendation: score.score >= 75
-        ? "Kamu siap mencoba tantangan tentang merawat tanaman."
-        : "Coba belajar lagi tentang cahaya dan air, lalu ulangi kuis.",
-      badges: score.score >= 75 ? ["Ahli Tanaman Muda"] : [],
+      recommendation: recommendation.message,
+      badges: score.score >= 85 ? ["Eco Exhibitor", "Ahli Tanaman Muda"] : score.score >= 70 ? ["Ahli Tanaman Muda"] : [],
       pendingValidation: 0,
       completedAt: "2026-05-26",
     });
@@ -65,7 +64,8 @@ export function EcoMasterAssessmentPage() {
   };
 
   if (result) {
-    const needsPractice = result.score < 75;
+    const nextRecommendation = getEcoMasterRecommendation(result.score);
+    const needsPractice = result.score < 70;
     return (
       <div className="mx-auto max-w-4xl space-y-6">
         <PageHeader
@@ -93,7 +93,7 @@ export function EcoMasterAssessmentPage() {
           </EcoCard>
           <EcoCard tone={needsPractice ? "cream" : "soft"}>
             <h2 className="font-heading text-xl font-black text-leaf-700">
-              {needsPractice ? "Mari latihan lagi" : "Tantangan berikutnya"}
+              {nextRecommendation.label}
             </h2>
             <p className="mt-3 text-sm font-semibold leading-7 text-slateText">{result.recommendation}</p>
           </EcoCard>
@@ -101,9 +101,9 @@ export function EcoMasterAssessmentPage() {
         <div className="flex flex-wrap justify-center gap-3">
           <EcoButton
             variant={needsPractice ? "primary" : "secondary"}
-            href={needsPractice ? "/siswa/ecolearn" : "/siswa/ecochallenge"}
+            href={nextRecommendation.nextHref}
           >
-            {needsPractice ? "Lihat Latihan Ulang" : "Ambil Tantangan Lanjutan"}
+            {nextRecommendation.actionLabel}
           </EcoButton>
           <EcoButton variant="secondary" icon={<RefreshCw className="size-4" />} onClick={restart}>
             Ulangi Kuis
@@ -149,6 +149,7 @@ export function EcoMasterAssessmentPage() {
               key={option}
               type="button"
               disabled={Boolean(answer)}
+              aria-pressed={answer === option}
               onClick={() => chooseAnswer(option)}
               className={`min-h-14 rounded-2xl border p-4 text-left text-base font-bold transition ${
                 answer === option

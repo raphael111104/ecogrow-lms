@@ -5,12 +5,13 @@ import Image from "next/image";
 import { Award, Camera, Sparkles, Trophy } from "lucide-react";
 import { FriendlyAlert } from "@/components/shared/FriendlyAlert";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 import { EcoBadge } from "@/components/ui/EcoBadge";
 import { EcoButton } from "@/components/ui/EcoButton";
 import { EcoCard } from "@/components/ui/EcoCard";
 import { galleryPosts, users } from "@/data";
 import { useMockStorage } from "@/hooks/useMockStorage";
-import type { GalleryPost } from "@/types/ecogrow";
+import type { GalleryCategory, GalleryPost } from "@/types/ecogrow";
 
 const categoryLabel = {
   foto_tanaman: "Foto tanaman",
@@ -21,11 +22,42 @@ const categoryLabel = {
 };
 
 export function StudentGalleryPage() {
-  const [posts] = useMockStorage<GalleryPost[]>("ecoGrow-exhibition-gallery", galleryPosts);
+  const [posts, setPosts] = useMockStorage<GalleryPost[]>("ecoGrow-exhibition-gallery", galleryPosts);
   const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    title: "Poster Siklus Hidup Kangkung",
+    description: "Tanaman tumbuh sehat jika mendapat air, cahaya, dan perawatan yang teratur.",
+    supportingData: "Tinggi 31 cm, 16 daun, foto hari ke-1 sampai ke-10.",
+    imageUrl: "/assets/images/ecogrow-concept-board.webp",
+    category: "poster" as GalleryCategory,
+    badgeCandidate: "Eco Exhibitor",
+  });
   const published = posts.filter((post) => post.moderationStatus === "approved");
   const featured = published.filter((post) => post.isFeatured);
   const ownWork = posts.find((post) => post.studentId === "siswa-1");
+
+  const updateForm = (field: keyof typeof form, value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const submitWork = () => {
+    const nextPost: GalleryPost = {
+      id: `student-gallery-${Date.now()}`,
+      studentId: "siswa-1",
+      projectId: "proyek-kangkung",
+      title: form.title,
+      description: form.description,
+      supportingData: form.supportingData,
+      imageUrl: form.imageUrl,
+      createdAt: "2026-05-30",
+      likes: 0,
+      moderationStatus: "pending",
+      category: form.category,
+      stage: "NITI_SAJATI",
+    };
+    setPosts([nextPost, ...posts]);
+    setSubmitted(true);
+  };
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -35,7 +67,7 @@ export function StudentGalleryPage() {
         description="Inilah puncak perjalananmu. Karya terbaik kelas dipamerkan untuk menunjukkan cara kita merawat kebun sekolah."
         badge="Pamerkan Karya"
         actions={
-          <EcoButton variant="reward" icon={<Camera className="size-4" />} onClick={() => setSubmitted(true)}>
+          <EcoButton variant="reward" icon={<Camera className="size-4" />} onClick={submitWork}>
             Ajukan Karya Terbaik
           </EcoButton>
         }
@@ -77,6 +109,53 @@ export function StudentGalleryPage() {
               <p className="mt-1 font-heading text-xl font-black text-white">{ownWork.title}</p>
             </div>
           ) : null}
+        </div>
+      </EcoCard>
+
+      <EcoCard tone="cream">
+        <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-earth">Submit Karya Akhir</p>
+            <h2 className="mt-2 font-heading text-2xl font-black text-leaf-700">Tulis pesan utama pameranmu</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+                Judul karya
+                <input className="eco-input" value={form.title} onChange={(event) => updateForm("title", event.target.value)} />
+              </label>
+              <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+                Jenis karya
+                <select className="eco-input" value={form.category} onChange={(event) => updateForm("category", event.target.value)}>
+                  {Object.entries(categoryLabel).map(([id, label]) => (
+                    <option key={id} value={id}>{label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block space-y-2 text-sm font-extrabold text-mutedText md:col-span-2">
+                Pesan utama
+                <textarea className="eco-input min-h-24 py-3" value={form.description} onChange={(event) => updateForm("description", event.target.value)} />
+              </label>
+              <label className="block space-y-2 text-sm font-extrabold text-mutedText md:col-span-2">
+                Data pendukung
+                <input className="eco-input" value={form.supportingData} onChange={(event) => updateForm("supportingData", event.target.value)} />
+              </label>
+              <label className="block space-y-2 text-sm font-extrabold text-mutedText md:col-span-2">
+                URL gambar mock
+                <input className="eco-input" value={form.imageUrl} onChange={(event) => updateForm("imageUrl", event.target.value)} />
+              </label>
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white p-4">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-leaf-50">
+              <Image src={form.imageUrl} alt={`Preview ${form.title}`} fill className="object-cover" />
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <StatusBadge status={submitted ? "waiting_feedback" : "draft"} label={submitted ? "Menunggu review guru" : "Draft karya"} />
+              <EcoBadge className="bg-sun/25 text-earth">Kandidat Badge: {form.badgeCandidate}</EcoBadge>
+            </div>
+            <p className="mt-3 font-heading text-xl font-black text-leaf-700">{form.title}</p>
+            <p className="mt-2 text-sm font-semibold leading-6 text-mutedText">{form.description}</p>
+            <p className="mt-3 rounded-xl bg-leaf-50 p-3 text-sm font-bold text-leaf-700">{form.supportingData}</p>
+          </div>
         </div>
       </EcoCard>
 
