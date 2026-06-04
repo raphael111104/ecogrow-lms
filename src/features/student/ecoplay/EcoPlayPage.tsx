@@ -97,7 +97,96 @@ const compostChoices = [
   },
 ];
 
+const foodChainSequence = [
+  {
+    id: "kangkung",
+    label: "Kangkung sebagai produsen",
+    hint: "Tanaman membuat makanan dengan bantuan cahaya.",
+  },
+  {
+    id: "grasshopper",
+    label: "Belalang memakan daun",
+    hint: "Serangga kecil bisa mendapatkan energi dari daun.",
+  },
+  {
+    id: "frog",
+    label: "Katak memakan serangga",
+    hint: "Katak membantu menjaga keseimbangan kebun.",
+  },
+  {
+    id: "soil",
+    label: "Sisa makhluk hidup menyuburkan tanah",
+    hint: "Bahan organik kembali menjadi bagian dari kebun.",
+  },
+];
+
+const plantPartChoices = [
+  {
+    id: "root",
+    label: "Akar",
+    correct: false,
+    note: "Akar kangkung menyerap air dari media tanam.",
+  },
+  {
+    id: "stem",
+    label: "Batang",
+    correct: false,
+    note: "Batang membantu daun berdiri dan mengalirkan air.",
+  },
+  {
+    id: "leaf",
+    label: "Daun",
+    correct: true,
+    note: "Daun menangkap cahaya dan banyak membantu fotosintesis.",
+  },
+  {
+    id: "pot",
+    label: "Pot",
+    correct: false,
+    note: "Pot hanya menjadi wadah, bukan bagian tanaman.",
+  },
+];
+
+const healthyPlantChoices = [
+  {
+    id: "check-water-light",
+    label: "Cek media tanam dan cahaya",
+    correct: true,
+    note: "Langkah ini paling aman: amati dulu, lalu rawat sesuai kebutuhan.",
+  },
+  {
+    id: "ignore",
+    label: "Biarkan sampai besok",
+    correct: false,
+    note: "Tanaman layu perlu diamati segera agar tidak makin lemah.",
+  },
+  {
+    id: "throw-water",
+    label: "Tuang air sebanyak-banyaknya",
+    correct: false,
+    note: "Air terlalu banyak juga bisa mengganggu akar di media tanam.",
+  },
+  {
+    id: "hide-from-sun",
+    label: "Jauhkan dari semua cahaya",
+    correct: false,
+    note: "Kangkung tetap membutuhkan cahaya cukup untuk tumbuh.",
+  },
+];
+
 const miniGameById = {
+  "food-chain": {
+    type: "food-chain",
+    title: "Puzzle Rantai Makanan",
+    prompt: "Tekan kartu sesuai urutan energi di kebun sekolah.",
+    reward: 20,
+  },
+  "plant-parts": {
+    type: "plant-parts",
+    title: "Tebak Bagian Kangkung",
+    prompt: "Pilih bagian tanaman yang paling banyak menangkap cahaya.",
+    reward: 15,
+  },
   photosynthesis: {
     type: "sequence",
     title: "Urutkan Fotosintesis",
@@ -110,12 +199,21 @@ const miniGameById = {
     prompt: "Pilih bahan yang bisa masuk ke kompos sekolah.",
     reward: 15,
   },
+  "healthy-plant": {
+    type: "healthy-plant",
+    title: "Tanaman Sehat",
+    prompt: "Pilih aksi terbaik saat daun kangkung mulai layu.",
+    reward: 25,
+  },
 };
 
 export function EcoPlayPage() {
   const recommended = studentGameCards[2];
   const [activeGameId, setActiveGameId] = useState<string>(recommended.id);
   const [sequencePick, setSequencePick] = useState<string[]>([]);
+  const [foodChainPick, setFoodChainPick] = useState<string[]>([]);
+  const [plantPartPick, setPlantPartPick] = useState<string | null>(null);
+  const [healthyPlantPick, setHealthyPlantPick] = useState<string | null>(null);
   const [compostPick, setCompostPick] = useState<string[]>([]);
   const [compostFeedback, setCompostFeedback] = useState<"correct" | "incorrect" | null>(null);
   const activeGame = studentGameCards.find((game) => game.id === activeGameId);
@@ -123,6 +221,11 @@ export function EcoPlayPage() {
   const sequenceComplete = sequencePick.length === photosynthesisSequence.length;
   const sequenceIsCorrect =
     sequenceComplete && sequencePick.every((stepId, index) => stepId === photosynthesisSequence[index].id);
+  const foodChainComplete = foodChainPick.length === foodChainSequence.length;
+  const foodChainIsCorrect =
+    foodChainComplete && foodChainPick.every((stepId, index) => stepId === foodChainSequence[index].id);
+  const selectedPlantPart = plantPartChoices.find((choice) => choice.id === plantPartPick);
+  const selectedHealthyPlant = healthyPlantChoices.find((choice) => choice.id === healthyPlantPick);
   const compostIsCorrect =
     compostPick.length > 0 &&
     compostChoices.every((choice) => compostPick.includes(choice.id) === choice.compost);
@@ -130,6 +233,9 @@ export function EcoPlayPage() {
   const startGame = (gameId: string) => {
     setActiveGameId(gameId);
     setSequencePick([]);
+    setFoodChainPick([]);
+    setPlantPartPick(null);
+    setHealthyPlantPick(null);
     setCompostPick([]);
     setCompostFeedback(null);
   };
@@ -195,7 +301,7 @@ export function EcoPlayPage() {
           description={
             activeMiniGame
               ? "Pilih jawabanmu langsung di Arena Latihan Mini."
-              : "Contoh interaktif untuk permainan ini sedang disiapkan. Coba Urutkan Fotosintesis atau Pilah Sampah Organik dulu."
+              : "Pilih salah satu kartu permainan untuk membuka latihan kecil."
           }
         />
       ) : null}
@@ -210,7 +316,7 @@ export function EcoPlayPage() {
               </h2>
               <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-mutedText">
                 {activeMiniGame?.prompt ??
-                  "Saat ini dua contoh yang bisa dimainkan adalah Urutkan Fotosintesis dan Pilah Sampah Organik."}
+                  "Pilih permainan untuk berlatih konsep ekologi dari kebun sekolah."}
               </p>
             </div>
             <EcoBadge className="bg-cream text-earth" icon={<Award className="size-4" />}>
@@ -282,6 +388,147 @@ export function EcoPlayPage() {
                 <EcoButton className="mt-4" variant="secondary" fullWidth onClick={() => setSequencePick([])}>
                   Ulangi Urutan
                 </EcoButton>
+              </div>
+            </div>
+          ) : null}
+
+          {activeMiniGame?.type === "food-chain" ? (
+            <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_0.8fr]">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {foodChainSequence.map((step) => {
+                  const selectedIndex = foodChainPick.indexOf(step.id);
+                  const isSelected = selectedIndex >= 0;
+                  return (
+                    <button
+                      key={step.id}
+                      type="button"
+                      className={`rounded-3xl border p-4 text-left transition ${
+                        isSelected
+                          ? "border-leaf-500 bg-leaf-50 text-leaf-700 shadow-soft"
+                          : "border-leaf-100 bg-white text-slateText hover:-translate-y-0.5 hover:border-leaf-300"
+                      }`}
+                      aria-pressed={isSelected}
+                      onClick={() => {
+                        if (!isSelected && !foodChainComplete) {
+                          setFoodChainPick((current) => [...current, step.id]);
+                        }
+                      }}
+                    >
+                      <span className="inline-grid size-8 place-items-center rounded-full bg-sun text-sm font-black text-leaf-700">
+                        {isSelected ? selectedIndex + 1 : "?"}
+                      </span>
+                      <span className="mt-3 block font-heading text-lg font-black">{step.label}</span>
+                      <span className="mt-1 block text-xs font-semibold leading-5 opacity-75">{step.hint}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="rounded-3xl bg-leaf-50 p-5">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Urutan energimu</p>
+                <div className="mt-4 space-y-3">
+                  {foodChainSequence.map((step, index) => {
+                    const pickedStep = foodChainSequence.find((item) => item.id === foodChainPick[index]);
+                    return (
+                      <div key={step.id} className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+                        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-leaf-700 text-xs font-black text-white">
+                          {index + 1}
+                        </span>
+                        <span className="text-sm font-extrabold text-leaf-700">
+                          {pickedStep?.label ?? "Pilih kartu rantai makanan"}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {foodChainComplete ? (
+                  <FriendlyAlert
+                    className="mt-4"
+                    tone={foodChainIsCorrect ? "success" : "warning"}
+                    title={foodChainIsCorrect ? "Rantai makananmu runtut." : "Urutannya masih perlu ditukar."}
+                    description={
+                      foodChainIsCorrect
+                        ? "Energi dimulai dari kangkung, berpindah ke pemakan daun, lalu kembali membantu kebun melalui bahan organik."
+                        : "Mulai dari tanaman dulu, lalu pikirkan siapa yang mendapat energi dari daun."
+                    }
+                  />
+                ) : null}
+                <EcoButton className="mt-4" variant="secondary" fullWidth onClick={() => setFoodChainPick([])}>
+                  Ulangi Rantai
+                </EcoButton>
+              </div>
+            </div>
+          ) : null}
+
+          {activeMiniGame?.type === "plant-parts" ? (
+            <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_0.72fr]">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {plantPartChoices.map((choice) => (
+                  <button
+                    key={choice.id}
+                    type="button"
+                    className={`rounded-3xl border p-4 text-left transition ${
+                      plantPartPick === choice.id
+                        ? "border-leaf-500 bg-leaf-50 text-leaf-700 shadow-soft"
+                        : "border-leaf-100 bg-white text-slateText hover:-translate-y-0.5 hover:border-leaf-300"
+                    }`}
+                    aria-pressed={plantPartPick === choice.id}
+                    onClick={() => setPlantPartPick(choice.id)}
+                  >
+                    <span className="font-heading text-lg font-black">{choice.label}</span>
+                    <span className="mt-2 block text-xs font-semibold leading-5 opacity-75">{choice.note}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="rounded-3xl bg-leaf-50 p-5">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Petunjuk</p>
+                <p className="mt-3 text-sm font-semibold leading-6 text-mutedText">
+                  Kangkung di pot punya akar, batang, dan daun. Bagian yang paling banyak menangkap cahaya adalah kunci fotosintesis.
+                </p>
+                {selectedPlantPart ? (
+                  <FriendlyAlert
+                    className="mt-4"
+                    tone={selectedPlantPart.correct ? "success" : "warning"}
+                    title={selectedPlantPart.correct ? "Tepat, daun adalah pusat cahaya." : "Belum tepat, coba perhatikan fungsi daun."}
+                    description={selectedPlantPart.note}
+                  />
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {activeMiniGame?.type === "healthy-plant" ? (
+            <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_0.72fr]">
+              <div className="grid gap-3 sm:grid-cols-2">
+                {healthyPlantChoices.map((choice) => (
+                  <button
+                    key={choice.id}
+                    type="button"
+                    className={`rounded-3xl border p-4 text-left transition ${
+                      healthyPlantPick === choice.id
+                        ? "border-harvest bg-cream text-earth shadow-soft"
+                        : "border-leaf-100 bg-white text-slateText hover:-translate-y-0.5 hover:border-harvest/60"
+                    }`}
+                    aria-pressed={healthyPlantPick === choice.id}
+                    onClick={() => setHealthyPlantPick(choice.id)}
+                  >
+                    <span className="font-heading text-lg font-black">{choice.label}</span>
+                    <span className="mt-2 block text-xs font-semibold leading-5 opacity-75">{choice.note}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="rounded-3xl bg-cream p-5">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-earth">Kasus Kebun</p>
+                <p className="mt-3 text-sm font-semibold leading-6 text-mutedText">
+                  Daun kangkung terlihat agak layu setelah siang. Pilih aksi yang membantu sebelum mencatat jurnal.
+                </p>
+                {selectedHealthyPlant ? (
+                  <FriendlyAlert
+                    className="mt-4"
+                    tone={selectedHealthyPlant.correct ? "success" : "warning"}
+                    title={selectedHealthyPlant.correct ? "Aksi perawatanmu aman." : "Aksi itu belum paling aman."}
+                    description={selectedHealthyPlant.note}
+                  />
+                ) : null}
               </div>
             </div>
           ) : null}

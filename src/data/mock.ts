@@ -54,7 +54,7 @@ const studentGroups = [
 ];
 
 const ecoImages = {
-  hydroponicKangkung: "/assets/images/hydroponic-water-spinach.jpg",
+  hydroponicKangkung: "/assets/images/school-garden-kangkung-pots.png",
   hydroponicLettuce: "/assets/images/vertical-hydroponic-lettuce.jpg",
   seedlingCloseup: "/assets/images/seedling-closeup-unsplash.jpg",
   gardeningActivity: "/assets/images/gardening-activity-unsplash.jpg",
@@ -209,7 +209,7 @@ export const learningModules: LearningModule[] = [
     topic: "Fotosintesis dan Siklus Energi",
     duration: "4 pertemuan x 2x35 menit",
     description:
-      "Siswa belajar peran cahaya, air, daun, dan klorofil melalui proyek kangkung hidroponik.",
+      "Siswa belajar peran cahaya, air, daun, dan klorofil melalui proyek kangkung di kebun kelas.",
     learningOutcomes: [
       "Siswa memahami peran tumbuhan dalam menghasilkan makanan dan oksigen.",
       "Siswa mengamati pertumbuhan tanaman.",
@@ -225,11 +225,11 @@ export const learningModules: LearningModule[] = [
 export const projects: EcoProject[] = [
   {
     id: "proyek-kangkung",
-    title: "Misi Kangkung Hidroponik",
+    title: "Misi Kangkung Kebun Kelas",
     classId: "kelas-4b",
     moduleId: "modul-fotosintesis",
     plantType: "Kangkung",
-    method: "hydroponic",
+    method: "soil",
     startDate: "2026-05-01",
     endDate: "2026-05-28",
     progress: 68,
@@ -270,8 +270,8 @@ export const missions: EcoMission[] = [
     stage: "NITI_BUKTI",
     status: "active",
     points: 150,
-    instructions: "Isi air nutrisi secukupnya, ukur kangkung, lalu foto kondisi daun dari dekat.",
-    tasks: ["Cek tinggi air nutrisi", "Ukur tinggi tanaman dengan penggaris", "Catat warna dan jumlah daun", "Lampirkan foto pengamatan"],
+    instructions: "Siram pot secukupnya, ukur kangkung, lalu foto kondisi daun dari dekat.",
+    tasks: ["Cek kelembapan media tanam", "Ukur tinggi tanaman dengan penggaris", "Catat warna dan jumlah daun", "Lampirkan foto pengamatan"],
   },
   {
     id: "misi-bakti",
@@ -296,26 +296,26 @@ export const missions: EcoMission[] = [
 ];
 
 export const journals: JournalEntry[] = [
-  { id: "j-1", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-01", plantHeightCm: 5, leafCount: 4, condition: "sehat", weather: "cerah", waterMl: 180, note: "Benih kangkung mulai tegak. Warna daun muda hijau pucat dan akar putih terlihat di netpot.", photoUrl: ecoImages.seedlingCloseup },
-  { id: "j-2", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-02", plantHeightCm: 7, leafCount: 5, condition: "sehat", weather: "cerah", waterMl: 190, note: "Daun bertambah satu dan batang tidak rebah. Air nutrisi masih jernih.", photoUrl: ecoImages.seedlingCloseup },
+  { id: "j-1", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-01", plantHeightCm: 5, leafCount: 4, condition: "sehat", weather: "cerah", waterMl: 180, note: "Benih kangkung mulai tegak. Warna daun muda hijau pucat dan media tanam masih lembap.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-2", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-02", plantHeightCm: 7, leafCount: 5, condition: "sehat", weather: "cerah", waterMl: 190, note: "Daun bertambah satu dan batang tidak rebah. Pot disiram secukupnya pagi ini.", photoUrl: ecoImages.hydroponicKangkung },
   { id: "j-3", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-03", plantHeightCm: 9, leafCount: 6, condition: "sehat", weather: "mendung", waterMl: 170, note: "Air sedikit berkurang setelah siang. Tim menandai garis air agar besok mudah dibandingkan.", photoUrl: ecoImages.hydroponicKangkung },
   { id: "j-4", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-04", plantHeightCm: 12, leafCount: 7, condition: "sehat", weather: "cerah", waterMl: 200, note: "Batang lebih tegak dan daun menghadap ke arah cahaya jendela kelas.", photoUrl: ecoImages.hydroponicKangkung },
-  { id: "j-5", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-05", plantHeightCm: 15, leafCount: 8, condition: "sehat", weather: "hujan", waterMl: 160, note: "Cuaca hujan membuat cahaya berkurang, tetapi daun tetap segar karena air nutrisi cukup.", photoUrl: ecoImages.hydroponicKangkung },
-  { id: "j-6", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-06", plantHeightCm: 18, leafCount: 10, condition: "sehat", weather: "cerah", waterMl: 190, note: "Dua daun baru muncul. Kami mencatat bahwa daun yang dekat cahaya tampak lebih lebar.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-7", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-07", plantHeightCm: 21, leafCount: 11, condition: "sehat", weather: "cerah", waterMl: 200, note: "Pertumbuhan cepat setelah mendapat cahaya cukup. Akar terlihat lebih panjang di bawah netpot.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-5", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-05", plantHeightCm: 15, leafCount: 8, condition: "sehat", weather: "hujan", waterMl: 160, note: "Cuaca hujan membuat cahaya berkurang, tetapi daun tetap segar karena media tanam tidak kering.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-6", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-06", plantHeightCm: 18, leafCount: 10, condition: "sehat", weather: "cerah", waterMl: 190, note: "Dua daun baru muncul. Kami mencatat bahwa daun yang dekat cahaya tampak lebih lebar.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-7", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-07", plantHeightCm: 21, leafCount: 11, condition: "sehat", weather: "cerah", waterMl: 200, note: "Pertumbuhan cepat setelah mendapat cahaya cukup. Akar membantu tanaman menyerap air dari media tanam.", photoUrl: ecoImages.hydroponicKangkung },
   { id: "j-8", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-08", plantHeightCm: 23, leafCount: 12, condition: "sehat", weather: "mendung", waterMl: 180, note: "Daun makin lebar. Kami bertanya apakah cahaya mendung membuat pertumbuhan besok lebih lambat.", photoUrl: ecoImages.hydroponicKangkung },
-  { id: "j-9", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-09", plantHeightCm: 26, leafCount: 14, condition: "sehat", weather: "cerah", waterMl: 200, note: "Kelompok mengganti air nutrisi dan membersihkan lumut kecil di tepi wadah.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-9", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-09", plantHeightCm: 26, leafCount: 14, condition: "sehat", weather: "cerah", waterMl: 200, note: "Kelompok merapikan daun kering kecil dan mengecek kelembapan media tanam.", photoUrl: ecoImages.hydroponicKangkung },
   { id: "j-10", studentId: "siswa-1", projectId: "proyek-kangkung", date: "2026-05-10", plantHeightCm: 29, leafCount: 15, condition: "sehat", weather: "cerah", waterMl: 210, note: "Tanaman siap dipilih untuk foto galeri. Kami akan membandingkan tinggi dengan Tim Sahabat Tanah.", photoUrl: ecoImages.hydroponicKangkung },
-  { id: "j-11", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-01", plantHeightCm: 4, leafCount: 4, condition: "sehat", weather: "cerah", waterMl: 120, note: "Tanaman masih kecil dan posisi wadah agak jauh dari cahaya pagi.", photoUrl: ecoImages.seedlingCloseup },
-  { id: "j-12", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-02", plantHeightCm: 6, leafCount: 4, condition: "kuning", weather: "cerah", waterMl: 110, note: "Ada satu daun mulai kuning. Kami menduga air terlalu sedikit dan cahaya terlalu panas.", photoUrl: ecoImages.seedlingCloseup },
-  { id: "j-13", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-03", plantHeightCm: 8, leafCount: 5, condition: "perlu_perawatan", weather: "mendung", waterMl: 100, note: "Air kurang, perlu perhatian. Tim membuat tanda batas air minimum.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-14", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-04", plantHeightCm: 10, leafCount: 6, condition: "sehat", weather: "cerah", waterMl: 170, note: "Setelah ditambah air, daun membaik. Warna kuning tidak bertambah.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-15", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-05", plantHeightCm: 12, leafCount: 7, condition: "sehat", weather: "hujan", waterMl: 150, note: "Pertumbuhan stabil. Kami memindahkan wadah agar tetap mendapat cahaya tidak langsung.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-16", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-06", plantHeightCm: 14, leafCount: 8, condition: "layu", weather: "cerah", waterMl: 90, note: "Tanaman agak layu saat siang. Kelompok mengamati air dan suhu area meja.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-17", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-07", plantHeightCm: 17, leafCount: 9, condition: "perlu_perawatan", weather: "cerah", waterMl: 130, note: "Perlu mengatur volume air. Kami sepakat mengecek pagi dan sebelum pulang.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-18", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-08", plantHeightCm: 19, leafCount: 10, condition: "sehat", weather: "mendung", waterMl: 170, note: "Daun kembali segar setelah jadwal cek air dibuat.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-19", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-09", plantHeightCm: 21, leafCount: 11, condition: "sehat", weather: "cerah", waterMl: 180, note: "Kelompok mencatat lebih rapi dan mulai membandingkan tinggi dengan data minggu pertama.", photoUrl: ecoImages.hydroponicLettuce },
-  { id: "j-20", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-10", plantHeightCm: 24, leafCount: 12, condition: "sehat", weather: "cerah", waterMl: 185, note: "Tanaman siap dibandingkan dengan tim lain. Perawatan air membuat pertumbuhan kembali stabil.", photoUrl: ecoImages.hydroponicLettuce },
+  { id: "j-11", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-01", plantHeightCm: 4, leafCount: 4, condition: "sehat", weather: "cerah", waterMl: 120, note: "Tanaman masih kecil dan posisi wadah agak jauh dari cahaya pagi.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-12", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-02", plantHeightCm: 6, leafCount: 4, condition: "kuning", weather: "cerah", waterMl: 110, note: "Ada satu daun mulai kuning. Kami menduga air terlalu sedikit dan cahaya terlalu panas.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-13", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-03", plantHeightCm: 8, leafCount: 5, condition: "perlu_perawatan", weather: "mendung", waterMl: 100, note: "Air kurang, perlu perhatian. Tim membuat tanda batas air minimum.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-14", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-04", plantHeightCm: 10, leafCount: 6, condition: "sehat", weather: "cerah", waterMl: 170, note: "Setelah ditambah air, daun membaik. Warna kuning tidak bertambah.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-15", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-05", plantHeightCm: 12, leafCount: 7, condition: "sehat", weather: "hujan", waterMl: 150, note: "Pertumbuhan stabil. Kami memindahkan wadah agar tetap mendapat cahaya tidak langsung.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-16", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-06", plantHeightCm: 14, leafCount: 8, condition: "layu", weather: "cerah", waterMl: 90, note: "Tanaman agak layu saat siang. Kelompok mengamati air dan suhu area meja.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-17", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-07", plantHeightCm: 17, leafCount: 9, condition: "perlu_perawatan", weather: "cerah", waterMl: 130, note: "Perlu mengatur volume air. Kami sepakat mengecek pagi dan sebelum pulang.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-18", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-08", plantHeightCm: 19, leafCount: 10, condition: "sehat", weather: "mendung", waterMl: 170, note: "Daun kembali segar setelah jadwal cek air dibuat.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-19", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-09", plantHeightCm: 21, leafCount: 11, condition: "sehat", weather: "cerah", waterMl: 180, note: "Kelompok mencatat lebih rapi dan mulai membandingkan tinggi dengan data minggu pertama.", photoUrl: ecoImages.hydroponicKangkung },
+  { id: "j-20", studentId: "siswa-5", projectId: "proyek-kangkung", date: "2026-05-10", plantHeightCm: 24, leafCount: 12, condition: "sehat", weather: "cerah", waterMl: 185, note: "Tanaman siap dibandingkan dengan tim lain. Perawatan air membuat pertumbuhan kembali stabil.", photoUrl: ecoImages.hydroponicKangkung },
 ];
 
 export const quizzes: Quiz[] = [
@@ -350,7 +350,7 @@ export const badges: Badge[] = [
 ];
 
 export const harvests: HarvestReport[] = [
-  { id: "panen-1", projectId: "proyek-kangkung", groupName: "Tim Tunas Hijau", productName: "Kangkung hidroponik", quantity: 2.5, unit: "kg", harvestedAt: "2026-05-28", imageUrl: ecoImages.hydroponicKangkung, impactMetric: "10 porsi sayur untuk pojok pangan sehat", contributionNote: "Dicuci, ditimbang, lalu dicatat sebagai contoh pangan sehat dari kebun kelas." },
+  { id: "panen-1", projectId: "proyek-kangkung", groupName: "Tim Tunas Hijau", productName: "Kangkung kebun kelas", quantity: 2.5, unit: "kg", harvestedAt: "2026-05-28", imageUrl: ecoImages.hydroponicKangkung, impactMetric: "10 porsi sayur untuk pojok pangan sehat", contributionNote: "Dicuci, ditimbang, lalu dicatat sebagai contoh pangan sehat dari kebun kelas." },
   { id: "panen-2", projectId: "proyek-kangkung", groupName: "Tim Sahabat Tanah", productName: "Bayam sekolah", quantity: 1.8, unit: "kg", harvestedAt: "2026-05-28", imageUrl: ecoImages.vegetableHarvest, impactMetric: "Bahan diskusi gizi seimbang", contributionNote: "Dibandingkan dengan kangkung untuk melihat perbedaan bentuk daun dan masa panen." },
   { id: "panen-3", projectId: "proyek-kangkung", groupName: "Tim Kompos Ceria", productName: "Kompos daun kering", quantity: 4, unit: "kg", harvestedAt: "2026-05-27", imageUrl: ecoImages.agricultureField, impactMetric: "Media tanam ulang untuk 12 polybag", contributionNote: "Dipakai kembali untuk proyek bibit cabai agar siswa melihat siklus bahan organik." },
   { id: "panen-4", projectId: "proyek-kangkung", groupName: "Tim Cahaya Pagi", productName: "Bibit cabai", quantity: 12, unit: "polybag", harvestedAt: "2026-05-29", imageUrl: ecoImages.seedlingCloseup, impactMetric: "Proyek lanjutan setelah pameran", contributionNote: "Dirawat sebagai rencana keberlanjutan Smart Eco-Food School." },
@@ -380,9 +380,9 @@ export const harvestRecords = [
 ];
 
 export const galleryPosts: GalleryPost[] = [
-  { id: "galeri-1", studentId: "siswa-1", projectId: "proyek-kangkung", title: "Akar Kangkung di Netpot", description: "Akar putih mulai panjang. Tim kami belajar bahwa akar menyerap air nutrisi agar daun tetap segar.", imageUrl: ecoImages.hydroponicKangkung, createdAt: "2026-05-07", likes: 18, moderationStatus: "approved", isFeatured: true, category: "foto_tanaman", stage: "NITI_BUKTI" },
-  { id: "galeri-2", studentId: "siswa-5", projectId: "proyek-kangkung", title: "Catatan Air Nutrisi", description: "Setelah daun sempat layu, kami membuat garis batas air minimum dan jadwal cek pagi-siang.", imageUrl: ecoImages.hydroponicLettuce, createdAt: "2026-05-08", likes: 12, moderationStatus: "pending", category: "refleksi", stage: "NITI_BAKTI" },
-  { id: "galeri-3", studentId: "siswa-2", projectId: "proyek-kangkung", title: "Poster Fotosintesis Tim Tunas", description: "Matahari memberi cahaya, daun menangkap energi, air membantu tanaman membuat makanan dan oksigen.", imageUrl: "/assets/images/ecogrow-concept-board.webp", createdAt: "2026-05-09", likes: 21, moderationStatus: "approved", isFeatured: true, category: "poster", stage: "NITI_SAJATI" },
+  { id: "galeri-1", studentId: "siswa-1", projectId: "proyek-kangkung", title: "Kangkung di Pot Kebun Kelas", description: "Daun kangkung tumbuh segar. Tim kami belajar bahwa akar menyerap air dari media tanam agar daun tetap hijau.", imageUrl: ecoImages.hydroponicKangkung, createdAt: "2026-05-07", likes: 18, moderationStatus: "approved", isFeatured: true, category: "foto_tanaman", stage: "NITI_BUKTI" },
+  { id: "galeri-2", studentId: "siswa-5", projectId: "proyek-kangkung", title: "Catatan Siram Pagi", description: "Setelah daun sempat layu, kami membuat jadwal cek pagi-siang dan menyiram pot secukupnya.", imageUrl: ecoImages.hydroponicKangkung, createdAt: "2026-05-08", likes: 12, moderationStatus: "pending", category: "refleksi", stage: "NITI_BAKTI" },
+  { id: "galeri-3", studentId: "siswa-2", projectId: "proyek-kangkung", title: "Daun Kangkung Menangkap Cahaya", description: "Matahari memberi cahaya, daun menangkap energi, air membantu tanaman membuat makanan dan oksigen.", imageUrl: ecoImages.hydroponicKangkung, createdAt: "2026-05-09", likes: 21, moderationStatus: "approved", isFeatured: true, category: "foto_tanaman", stage: "NITI_SAJATI" },
   { id: "galeri-4", studentId: "siswa-12", projectId: "proyek-kangkung", title: "Panen Mini Tim Cahaya", description: "Kami menimbang hasil panen, mencatat berat, dan menulis manfaatnya untuk pangan sehat sekolah.", imageUrl: ecoImages.vegetableHarvest, createdAt: "2026-05-10", likes: 9, moderationStatus: "revision", category: "panen", stage: "NITI_SAJATI" },
 ];
 
@@ -391,12 +391,12 @@ export const ecoExhibitionItems: EcoExhibitionItem[] = [
     id: "exhibit-1",
     studentName: "Adit",
     groupName: "Tim Tunas Hijau",
-    title: "Akar Kangkung di Netpot",
+    title: "Kangkung di Pot Kebun Kelas",
     type: "photo",
     stageId: "NITI_SAJATI",
     status: "approved",
-    mainMessage: "Akar sehat membantu kangkung menyerap air nutrisi sehingga daun tetap segar.",
-    evidence: ["Foto akar hari ke-7", "Catatan tinggi tanaman", "Jurnal air nutrisi"],
+    mainMessage: "Akar sehat membantu kangkung menyerap air dari media tanam sehingga daun tetap segar.",
+    evidence: ["Foto tanaman hari ke-7", "Catatan tinggi tanaman", "Jurnal siram pagi"],
     badgeCandidate: "Penjaga Tunas",
     sourcePostId: "galeri-1",
   },
@@ -486,19 +486,19 @@ export const ecoLearnContents: LearningContent[] = [
     summary: "Tanaman memakai cahaya matahari untuk membantu membuat makanan di daun dan menghasilkan oksigen.",
     keywords: ["cahaya", "daun", "air", "klorofil", "oksigen"],
     relatedStage: "NITI_SURTI",
-    imageUrl: ecoImages.seedlingCloseup,
+    imageUrl: ecoImages.hydroponicKangkung,
     essentialQuestion: "Bagaimana daun kecil membantu tanaman membuat makanan?",
   },
   {
-    id: "learn-hidroponik",
-    title: "Apa itu hidroponik sederhana?",
+    id: "learn-pot-kangkung",
+    title: "Merawat kangkung di pot sederhana",
     type: "observation",
     durationMinute: 3,
-    summary: "Hidroponik adalah cara menanam memakai air bernutrisi tanpa tanah, sambil tetap menjaga cahaya dan akar.",
-    keywords: ["hidroponik", "air nutrisi", "akar", "cahaya"],
+    summary: "Kangkung di pot perlu media tanam yang lembap, cahaya cukup, dan pengamatan akar serta daun secara rutin.",
+    keywords: ["pot", "media tanam", "akar", "cahaya"],
     relatedStage: "NITI_BUKTI",
     imageUrl: ecoImages.hydroponicKangkung,
-    essentialQuestion: "Apa yang perlu dicek agar tanaman hidroponik tidak layu?",
+    essentialQuestion: "Apa yang perlu dicek agar kangkung di pot tidak layu?",
   },
   {
     id: "learn-kompos",
@@ -530,7 +530,7 @@ export const ecoLearnContents: LearningContent[] = [
     summary: "Tanaman dapat terpengaruh oleh panas, hujan, dan perubahan cuaca, sehingga data harian membantu kita merawatnya.",
     keywords: ["cuaca", "iklim", "panas", "hujan", "data harian"],
     relatedStage: "NITI_BAKTI",
-    imageUrl: ecoImages.agricultureField,
+    imageUrl: ecoImages.hydroponicKangkung,
     essentialQuestion: "Mengapa catatan cuaca membantu kita memahami kondisi tanaman?",
   },
   {
@@ -541,7 +541,7 @@ export const ecoLearnContents: LearningContent[] = [
     summary: "Tanaman yang dirawat bersama dapat menjadi sumber pangan sehat dan melatih tanggung jawab.",
     keywords: ["panen", "pangan sehat", "ketahanan pangan"],
     relatedStage: "NITI_BAKTI",
-    imageUrl: ecoImages.vegetableHarvest,
+    imageUrl: ecoImages.hydroponicKangkung,
     essentialQuestion: "Bagaimana hasil panen kecil bisa membantu sekolah belajar pangan sehat?",
   },
   {
@@ -552,7 +552,7 @@ export const ecoLearnContents: LearningContent[] = [
     summary: "Kebun sekolah dapat menjadi tempat belajar sains, kerja sama, tanggung jawab, dan kepedulian lingkungan.",
     keywords: ["kebun sekolah", "kolaborasi", "tanggung jawab", "aksi hijau"],
     relatedStage: "NITI_SAJATI",
-    imageUrl: ecoImages.gardeningActivity,
+    imageUrl: ecoImages.hydroponicKangkung,
     essentialQuestion: "Karya apa yang bisa kamu pamerkan dari proyek kebun sekolah?",
   },
 ];
@@ -700,7 +700,7 @@ export const ecoChallenges: EcoChallenge[] = [
     status: "not_started",
     kaihFocus: ["ekologis", "humanis"],
     tasks: ["Cari sampah organik", "Pisahkan dari plastik", "Foto hasil pilahan"],
-    imageUrl: ecoImages.agricultureField,
+    imageUrl: ecoImages.gardeningActivity,
     parentPrompt: "Ajak keluarga memilih sisa daun atau kulit buah yang aman untuk belajar kompos.",
     evidenceHint: "Kirim foto pilahan organik dan cerita singkat tempat sampahnya.",
   },
@@ -714,7 +714,7 @@ export const ecoChallenges: EcoChallenge[] = [
     status: "not_started",
     kaihFocus: ["ekologis", "mandiri"],
     tasks: ["Foto tanaman di dekat sumber cahaya", "Catat apakah daunnya segar atau layu", "Tulis satu perbaikan yang bisa dicoba"],
-    imageUrl: ecoImages.seedlingCloseup,
+    imageUrl: ecoImages.hydroponicKangkung,
     parentPrompt: "Ajak keluarga melihat apakah tanaman mendapat cahaya pagi atau siang.",
     evidenceHint: "Kirim foto tanaman dan catatan lokasi cahayanya.",
   },
@@ -728,7 +728,7 @@ export const ecoChallenges: EcoChallenge[] = [
     status: "not_started",
     kaihFocus: ["ekologis", "mandiri"],
     tasks: ["Pilih satu kebiasaan hemat air", "Catat selama tiga hari", "Tulis janji aksi hijau"],
-    imageUrl: ecoImages.gardeningActivity,
+    imageUrl: ecoImages.hydroponicKangkung,
     parentPrompt: "Orang tua boleh memberi paraf jika kebiasaan hemat air dilakukan.",
     evidenceHint: "Kirim catatan harian singkat dan janji aksi.",
   },
@@ -775,7 +775,7 @@ export const activeClassOptions: SelectOption[] = [
 ];
 
 export const activeProjectOptions: SelectOption[] = [
-  { id: "proyek-kangkung", name: "Hidroponik Kangkung", title: "Hidroponik Kangkung", currentStage: "NITI_BUKTI" },
+  { id: "proyek-kangkung", name: "Kangkung Kebun Kelas", title: "Kangkung Kebun Kelas", currentStage: "NITI_BUKTI" },
   { id: "proyek-kompos", name: "Kompos Daun Sekolah", title: "Kompos Daun Sekolah", currentStage: "NITI_SURTI" },
 ];
 
@@ -842,7 +842,7 @@ export const portfolioEvidence: Evidence[] = [
     id: "evidence-2",
     title: "Poster fotosintesis",
     description: "Karya visual yang menghubungkan cahaya, air, daun, dan oksigen.",
-    imageUrl: "/assets/images/ecogrow-concept-board.webp",
+    imageUrl: ecoImages.hydroponicKangkung,
     stage: "NITI_SAJATI",
     status: "pending",
   },

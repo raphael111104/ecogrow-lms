@@ -45,6 +45,7 @@ export const siswaPrimaryNavigation = [
 ];
 
 export const siswaSecondaryNavigation = [
+  { label: "Kuis Awal", href: "/siswa/ecoreadiness", icon: ClipboardList },
   { label: "Galeri", href: "/siswa/galeri", icon: Camera },
   { label: "Kuis Akhir", href: "/siswa/ecomaster-quiz", icon: Trophy },
   { label: "Laporan Belajar", href: "/siswa/laporan-belajar", icon: FileText },

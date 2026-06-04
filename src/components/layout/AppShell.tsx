@@ -50,6 +50,8 @@ export function AppShell({
   const notifications = teacherShell?.notifications ?? studentShell?.notifications ?? [];
   const switchOptions: SelectOption[] = teacherShell?.activeClassOptions ?? studentShell?.activeProjectOptions ?? [];
   const switchValue = teacherShell?.activeClass.id ?? studentShell?.activeProject.id ?? "";
+  const [selectedMissionId, setSelectedMissionId] = useState(switchValue);
+  const [searchQuery, setSearchQuery] = useState("");
   const roleLabel = isTeacher ? "Guru" : "Siswa";
   const studentPoints = studentShell?.profile.points ?? 0;
   const studentLevel = studentShell?.profile.level ?? 1;
@@ -77,6 +79,10 @@ export function AppShell({
   const searchPlaceholder = isTeacher
     ? "Cari modul, jurnal, proyek, atau siswa"
     : "Cari misi atau materi belajar";
+  const selectedSwitchOption = switchOptions.find((option) => option.id === selectedMissionId) ?? switchOptions[0];
+  const searchResults = navItems.filter((item) =>
+    item.label.toLowerCase().includes(searchQuery.trim().toLowerCase()),
+  );
 
   const handleLogout = (event: MouseEvent<HTMLAnchorElement>) => {
     clearAuthSession();
@@ -89,7 +95,12 @@ export function AppShell({
     setMobileMenuOpen(false);
     setNotificationOpen(false);
     setStudentMoreOpen(false);
+    setSearchQuery("");
   }, [pathname]);
+
+  useEffect(() => {
+    setSelectedMissionId(switchValue);
+  }, [switchValue]);
 
   return (
     <div className={cn("page-shell-bg min-h-screen", isTeacher ? "teacher-shell" : "student-shell")}>
@@ -238,15 +249,41 @@ export function AppShell({
               />
             </Link>
 
-            <label className="hidden min-h-10 flex-1 items-center gap-3 rounded-lg border border-gardenBorder bg-white/90 px-3 text-sm text-mutedText shadow-soft md:flex">
-              <Search className="size-4" aria-hidden="true" />
-              <input
-                className="w-full bg-transparent text-xs font-semibold text-slateText outline-none placeholder:text-mutedText"
-                placeholder={searchPlaceholder}
-                aria-label={searchPlaceholder}
-                suppressHydrationWarning
-              />
-            </label>
+            <div className="relative hidden flex-1 md:block">
+              <label className="flex min-h-10 items-center gap-3 rounded-lg border border-gardenBorder bg-white/90 px-3 text-sm text-mutedText shadow-soft">
+                <Search className="size-4" aria-hidden="true" />
+                <input
+                  className="w-full bg-transparent text-xs font-semibold text-slateText outline-none placeholder:text-mutedText"
+                  placeholder={searchPlaceholder}
+                  aria-label={searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  suppressHydrationWarning
+                />
+              </label>
+              {searchQuery.trim() ? (
+                <div className="absolute left-0 right-0 top-12 z-30 rounded-xl border border-gardenBorder bg-white p-2 shadow-eco">
+                  {searchResults.length ? (
+                    <div className="grid gap-1">
+                      {searchResults.slice(0, 5).map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex min-h-10 items-center gap-2 rounded-lg px-3 text-xs font-black text-slateText transition hover:bg-leaf-50 hover:text-leaf-700"
+                        >
+                          <item.icon className="size-4 text-leaf-600" aria-hidden="true" />
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="rounded-lg bg-cream px-3 py-2 text-xs font-bold text-earth">
+                      Tidak ada halaman yang cocok. Coba kata lain yang lebih singkat.
+                    </p>
+                  )}
+                </div>
+              ) : null}
+            </div>
 
             <div className="hidden min-w-0 items-center gap-1.5 rounded-lg border border-gardenBorder bg-white px-3 py-2 text-xs font-black text-mutedText shadow-soft md:flex">
               <span>{roleLabel}</span>
@@ -256,7 +293,12 @@ export function AppShell({
 
             <label className="hidden min-h-10 items-center gap-2 rounded-lg border border-gardenBorder bg-white px-3 text-xs font-black text-leaf-700 shadow-soft xl:flex">
               <span>{isTeacher ? "Kelas" : "Misi"}</span>
-              <select className="max-w-44 bg-transparent text-xs font-bold text-slateText outline-none" defaultValue={switchValue} aria-label={isTeacher ? "Pilih kelas aktif" : "Pilih misi aktif"}>
+              <select
+                className="max-w-44 bg-transparent text-xs font-bold text-slateText outline-none"
+                value={selectedMissionId}
+                onChange={(event) => setSelectedMissionId(event.target.value)}
+                aria-label={isTeacher ? "Pilih kelas aktif" : "Pilih misi aktif"}
+              >
                 {switchOptions.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.name}
@@ -264,6 +306,11 @@ export function AppShell({
                 ))}
               </select>
             </label>
+            {!isTeacher && selectedSwitchOption ? (
+              <span className="hidden max-w-44 truncate rounded-lg border border-leaf-500/15 bg-leaf-50 px-3 py-2 text-xs font-black text-leaf-700 xl:block">
+                Aktif: {selectedSwitchOption.name}
+              </span>
+            ) : null}
 
             {!isTeacher ? (
               <div className="hidden items-center gap-2 rounded-full bg-sun/25 px-3 py-2 text-xs font-black text-leaf-700 sm:flex">
@@ -355,7 +402,7 @@ export function AppShell({
             {mobileMenuOpen ? (
               <div
                 id={`${role}-mobile-page-menu`}
-                className="absolute left-4 right-4 top-[calc(100%-0.25rem)] z-40 max-h-[min(28rem,calc(100vh-9rem))] overflow-y-auto rounded-2xl border border-leaf-500/15 bg-white p-2 shadow-[0_22px_70px_rgba(6,42,22,0.22)]"
+                className="fixed inset-x-4 bottom-24 z-40 max-h-[min(28rem,calc(100vh-9rem))] overflow-y-auto rounded-2xl border border-leaf-500/15 bg-white p-2 shadow-[0_22px_70px_rgba(6,42,22,0.22)] lg:absolute lg:bottom-auto lg:top-[calc(100%-0.25rem)]"
               >
                 <div className="mb-2 rounded-xl bg-leaf-50 px-3 py-2">
                   <p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-mutedText">

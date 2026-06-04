@@ -17,7 +17,8 @@ export function PortfolioPage() {
   const dashboard = getStudentDashboardMock();
   const mission = getStudentMissionMock();
   const portfolio = getStudentPortfolioMock();
-  const album = mission.journals.slice(-3).reverse();
+  const [storedJournals] = useMockStorage("ecoGrow-student-journals", mission.journals);
+  const album = storedJournals.slice(0, 3);
   const [reflectionMemory] = useMockStorage<StudentReflectionMemory | null>("ecoGrow-reflection-memory", null);
   const [readinessResult] = useMockStorage<EcoReadinessResult | null>("ecoGrow-readiness-result", null);
   const [masterResult] = useMockStorage<EcoMasterResult | null>("ecoGrow-ecomaster-results", null);
@@ -121,9 +122,10 @@ export function PortfolioPage() {
             <EcoCard key={journal.id} className="p-3">
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-leaf-50">
                 <Image
-                  src={journal.photoUrl ?? "/assets/images/seedling-closeup-unsplash.jpg"}
+                  src={journal.photoUrl ?? "/assets/images/school-garden-kangkung-pots.png"}
                   alt={`Tanaman pada ${journal.date}`}
                   fill
+                  sizes="(min-width: 640px) 30vw, 100vw"
                   className="object-cover"
                 />
               </div>
@@ -203,7 +205,7 @@ export function PortfolioPage() {
               <div key={item.id} className="rounded-2xl bg-white p-3">
                 {item.imageUrl ? (
                   <div className="relative aspect-video overflow-hidden rounded-xl bg-leaf-50">
-                    <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
+                    <Image src={item.imageUrl} alt={item.title} fill sizes="(min-width: 640px) 28vw, 100vw" className="object-cover" />
                   </div>
                 ) : null}
                 <p className="mt-3 font-bold text-leaf-700">{item.title}</p>

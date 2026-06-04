@@ -10,7 +10,7 @@ export function MyPlantCard({ journal }: { journal?: JournalEntry }) {
       <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Tanamanku</p>
       <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl bg-leaf-50">
         {journal?.photoUrl ? (
-          <Image src={journal.photoUrl} alt="Tanaman kangkung milik kelompok" fill className="object-cover" />
+          <Image src={journal.photoUrl} alt="Tanaman kangkung milik kelompok" fill sizes="(min-width: 1024px) 28vw, 100vw" className="object-cover" />
         ) : (
           <Sprout className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 text-leaf-500" />
         )}

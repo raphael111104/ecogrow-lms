@@ -32,6 +32,13 @@ Seluruh gambar/video eksternal yang digunakan pada prototype berasal dari sumber
   - Jenis lisensi: Aset internal proyek
   - Tanggal ditambahkan: 2026-05-07
 
+- Nama file: `school-garden-kangkung-pots.png`
+  - Sumber: Generated visual asset untuk halaman siswa EcoGrow
+  - URL asal: `C:/Users/PC/.codex/generated_images/019e903a-f422-76b0-b7bd-95ddb7587ba2/ig_000e71d456fb0c02016a20dd556f3481918d03ef705eeba049.png`
+  - Nama kreator: OpenAI image generation untuk EcoGrow Learning project
+  - Jenis lisensi: Aset internal proyek
+  - Tanggal ditambahkan: 2026-06-04
+
 ## Gambar Lokal Unduhan untuk Mockup LMS
 
 - Nama file: `hydroponic-water-spinach.jpg`

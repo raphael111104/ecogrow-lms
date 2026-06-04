@@ -134,7 +134,13 @@ export function EcoLearnPage() {
           {tab === "picture" ? (
             <div className="grid gap-5 md:grid-cols-[1fr_0.9fr] md:items-center">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-leaf-50">
-                <Image src={topic.imageUrl ?? "/assets/images/seedling-closeup-unsplash.jpg"} alt="Daun tanaman terkena cahaya" fill className="object-cover" />
+                <Image
+                  src={topic.imageUrl ?? "/assets/images/school-garden-kangkung-pots.png"}
+                  alt="Tanaman kangkung di pot kebun sekolah sebagai bahan pengamatan"
+                  fill
+                  sizes="(min-width: 768px) 48vw, 100vw"
+                  className="object-cover"
+                />
               </div>
               <div>
                 <h2 className="font-heading text-2xl font-black text-leaf-700">Amati buktinya</h2>

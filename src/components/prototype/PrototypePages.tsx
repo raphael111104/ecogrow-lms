@@ -239,7 +239,7 @@ function PageHero({
       <div
         className="absolute inset-0 opacity-24 mix-blend-screen"
         style={{
-          backgroundImage: "url('/assets/images/seedling-closeup-unsplash.jpg')",
+          backgroundImage: "url('/assets/images/school-garden-kangkung-pots.png')",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -471,7 +471,7 @@ function GuruDashboardMock() {
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Total siswa" value="25" note="8 siswa mock tampil dalam prototype" icon={Users} />
-        <MetricCard label="Proyek aktif" value="1" note="Misi Kangkung Hidroponik" icon={Sprout} />
+        <MetricCard label="Proyek aktif" value="1" note="Misi Kangkung Kebun Kelas" icon={Sprout} />
         <MetricCard label="Jurnal hari ini" value={String(todaysJournals)} note="3 kelompok sudah mengirim jurnal tanaman." icon={BookOpen} />
         <MetricCard label="Progress kelas" value="68%" note="Ada 2 siswa yang disarankan penguatan konsep." icon={Trophy} />
       </section>
@@ -1343,7 +1343,7 @@ export function EcoMissionPage() {
     weather: "cerah" as JournalEntry["weather"],
     waterMl: "200",
     note: "Aku mengukur tanaman dan melihat daun makin lebar.",
-    photoUrl: "/assets/images/hydroponic-water-spinach.jpg",
+    photoUrl: "/assets/images/school-garden-kangkung-pots.png",
   });
   const selectedMission = missions.find((mission) => mission.stage === selectedStage) ?? activeMission;
   const personalJournals = storedJournals.filter((journal) => journal.studentId === profile.userId);
@@ -1663,6 +1663,10 @@ export function EcoPlayPage() {
 export function EcomartPage() {
   const totalKg = harvestImpactSummary.totalVegetableKg;
   const [records, setRecords] = useStoredList("ecogrow-harvest-records", harvestRecords);
+  const [harvestReflection, setHarvestReflection] = useMockStorage("ecoGrow-harvest-reflection", {
+    learned: "",
+    contribution: "",
+  });
   const [recordForm, setRecordForm] = useState({
     groupName: "Tim Tunas Hijau",
     cropName: "Kangkung",
@@ -1671,6 +1675,7 @@ export function EcomartPage() {
     usage: "Demo pangan sehat kelas",
   });
   const [recordToast, setRecordToast] = useState("");
+  const [reflectionToast, setReflectionToast] = useState("");
 
   const updateRecordForm = (field: keyof typeof recordForm, value: string) => {
     setRecordForm((current) => ({ ...current, [field]: value }));
@@ -1690,6 +1695,14 @@ export function EcomartPage() {
     };
     setRecords([next, ...records]);
     setRecordToast("Catatan panen tersimpan. EcoPoint panen masuk sebagai simulasi kontribusi pangan sehat.");
+  };
+  const saveHarvestReflection = () => {
+    if (!harvestReflection.learned.trim() || !harvestReflection.contribution.trim()) {
+      setReflectionToast("Lengkapi dua cerita panen agar refleksimu tersimpan.");
+      return;
+    }
+    setHarvestReflection(harvestReflection);
+    setReflectionToast("Catatan refleksi panen tersimpan dan siap masuk Album Belajarku.");
   };
 
   return (
@@ -1774,12 +1787,28 @@ export function EcomartPage() {
           ))}
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
-          {["Apa yang kamu pelajari dari proses panen?", "Bagaimana hasil panen membantu sekolah?"].map((question) => (
-            <label key={question} className="block space-y-2 text-sm font-extrabold text-mutedText">
-              {question}
-              <textarea className={`${inputClass} min-h-24 py-3`} placeholder="Tulis ceritamu tentang panen di sini." />
-            </label>
-          ))}
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Apa yang kamu pelajari dari proses panen?
+            <textarea
+              className={`${inputClass} min-h-24 py-3`}
+              placeholder="Tulis ceritamu tentang panen kangkung di sini."
+              value={harvestReflection.learned}
+              onChange={(event) => setHarvestReflection({ ...harvestReflection, learned: event.target.value })}
+            />
+          </label>
+          <label className="block space-y-2 text-sm font-extrabold text-mutedText">
+            Bagaimana hasil panen membantu sekolah?
+            <textarea
+              className={`${inputClass} min-h-24 py-3`}
+              placeholder="Tulis manfaat panen untuk pangan sehat sekolah."
+              value={harvestReflection.contribution}
+              onChange={(event) => setHarvestReflection({ ...harvestReflection, contribution: event.target.value })}
+            />
+          </label>
+        </div>
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <EcoButton variant="reward" onClick={saveHarvestReflection}>Simpan Refleksi Panen</EcoButton>
+          <ToastMessage message={reflectionToast} />
         </div>
       </EcoCard>
     </div>
@@ -1792,10 +1821,10 @@ export function StudentGalleryPage() {
   const [filter, setFilter] = useState<GalleryCategory | "semua">("semua");
   const [toast, setToast] = useState("");
   const [form, setForm] = useState({
-    title: "Foto Kangkung Terbaru",
-    description: "Daun kangkung kelompokku makin hijau setelah air diganti.",
-    supportingData: "Tinggi 31 cm, 16 daun, air nutrisi 200 ml.",
-    imageUrl: "/assets/images/hydroponic-water-spinach.jpg",
+    title: "Foto Kangkung di Pot Kebun Kelas",
+    description: "Daun kangkung kelompokku makin hijau setelah disiram dan mendapat cahaya pagi.",
+    supportingData: "Tinggi 31 cm, 16 daun, disiram pagi hari.",
+    imageUrl: "/assets/images/school-garden-kangkung-pots.png",
     category: "foto_tanaman" as GalleryCategory,
     stage: "NITI_SAJATI" as EcoGrowStage,
   });
@@ -2153,17 +2182,68 @@ export function ReflectionPage() {
 
 export function EcoChallengePage() {
   const [challengeList, setChallengeList] = useStoredList<EcoChallenge>("ecogrow-challenges", ecoChallenges);
+  const proofFileUrlRef = useRef<string | null>(null);
   const [selectedId, setSelectedId] = useState(challengeList[0]?.id ?? ecoChallenges[0].id);
   const [toast, setToast] = useState("");
+  const [challengeEvidence, setChallengeEvidence] = useMockStorage("ecoGrow-challenge-evidence", [] as Array<{
+    challengeId: string;
+    title: string;
+    story: string;
+    parentNote: string;
+    imageUrl: string;
+    submittedAt: string;
+  }>);
+  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [proof, setProof] = useState({
     story: "Aku menyiram tanaman dengan air secukupnya bersama keluarga.",
-    imageUrl: "/assets/images/gardening-activity-unsplash.jpg",
+    imageUrl: "/assets/images/school-garden-kangkung-pots.png",
     parentNote: "Orang tua melihat Adit mencoba hemat air.",
     done: false,
   });
   const selected = challengeList.find((challenge) => challenge.id === selectedId) ?? challengeList[0];
+  const taskReady = selected.tasks.every((task) => completedTasks.includes(task));
+
+  useEffect(() => {
+    setCompletedTasks([]);
+    setProof((current) => ({ ...current, done: false, imageUrl: selected.imageUrl ?? "/assets/images/school-garden-kangkung-pots.png" }));
+  }, [selected.id, selected.imageUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (proofFileUrlRef.current) URL.revokeObjectURL(proofFileUrlRef.current);
+    };
+  }, []);
+
+  const toggleChallengeTask = (task: string) => {
+    setCompletedTasks((current) => (
+      current.includes(task) ? current.filter((item) => item !== task) : [...current, task]
+    ));
+  };
+
+  const handleProofImageChange = (file?: File) => {
+    if (!file) return;
+    if (proofFileUrlRef.current) URL.revokeObjectURL(proofFileUrlRef.current);
+    proofFileUrlRef.current = URL.createObjectURL(file);
+    setProof((current) => ({ ...current, imageUrl: proofFileUrlRef.current ?? selected.imageUrl ?? "/assets/images/school-garden-kangkung-pots.png" }));
+  };
 
   const submitProof = () => {
+    if (!taskReady || !proof.done) {
+      setToast("Centang semua tugas dan konfirmasi selesai sebelum mengirim bukti.");
+      return;
+    }
+    const stableImageUrl = proof.imageUrl.startsWith("blob:") ? (selected.imageUrl ?? "/assets/images/school-garden-kangkung-pots.png") : proof.imageUrl;
+    setChallengeEvidence([
+      {
+        challengeId: selected.id,
+        title: selected.title,
+        story: proof.story,
+        parentNote: proof.parentNote,
+        imageUrl: stableImageUrl,
+        submittedAt: "Hari ini",
+      },
+      ...challengeEvidence,
+    ]);
     setChallengeList(challengeList.map((challenge) => challenge.id === selected.id ? { ...challenge, status: "submitted" } : challenge));
     setToast("Tantangan dikirim. Pesan Guru akan segera datang.");
   };
@@ -2227,7 +2307,12 @@ export function EcoChallengePage() {
           <div className="mt-5 space-y-3">
             {selected.tasks.map((task) => (
               <label key={task} className="flex items-center gap-3 rounded-xl bg-leaf-50 p-4 font-bold text-slateText">
-                <input type="checkbox" className="size-5 accent-leaf-500" />
+                <input
+                  type="checkbox"
+                  checked={completedTasks.includes(task)}
+                  onChange={() => toggleChallengeTask(task)}
+                  className="size-5 accent-leaf-500"
+                />
                 {task}
               </label>
             ))}
@@ -2243,8 +2328,13 @@ export function EcoChallengePage() {
             </label>
           </div>
           <label className="mt-4 block space-y-2 text-sm font-extrabold text-mutedText">
-            URL bukti gambar
-            <input className={inputClass} value={proof.imageUrl} onChange={(event) => setProof((current) => ({ ...current, imageUrl: event.target.value }))} />
+            Foto bukti kegiatan
+            <input
+              className={`${inputClass} py-3`}
+              type="file"
+              accept="image/*"
+              onChange={(event) => handleProofImageChange(event.target.files?.[0])}
+            />
           </label>
           <MockUploadBox className="mt-4" previewUrl={proof.imageUrl} title="Pratinjau bukti tantangan" description="Bukti ini akan masuk ke Album Belajarku setelah disetujui guru." />
           {selected.parentPrompt ? <p className="mt-4 rounded-xl bg-cream p-4 text-sm font-bold leading-6 text-earth">{selected.parentPrompt}</p> : null}
@@ -2253,7 +2343,7 @@ export function EcoChallengePage() {
             <input type="checkbox" checked={proof.done} onChange={(event) => setProof((current) => ({ ...current, done: event.target.checked }))} className="size-5 accent-leaf-500" />
             Aku sudah menyelesaikan langkah tantangan ini.
           </label>
-          <EcoButton className="mt-5" onClick={submitProof} disabled={!proof.done} icon={<Send className="size-4" />}>Kirim bukti</EcoButton>
+          <EcoButton className="mt-5" onClick={submitProof} disabled={!taskReady || !proof.done} icon={<Send className="size-4" />}>Kirim bukti</EcoButton>
           <div className="mt-4"><ToastMessage message={toast} /></div>
         </EcoCard>
       </section>

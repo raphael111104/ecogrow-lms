@@ -13,6 +13,7 @@ import { EcoBadge } from "@/components/ui/EcoBadge";
 import { EcoButton } from "@/components/ui/EcoButton";
 import { EcoCard } from "@/components/ui/EcoCard";
 import { EcoProgress } from "@/components/ui/EcoProgress";
+import { useMockStorage } from "@/hooks/useMockStorage";
 import { getStudentMissionMock } from "@/mock/repositories/studentRepository";
 import type { JournalEntry } from "@/types/ecogrow";
 
@@ -23,19 +24,24 @@ type Notice = {
 };
 
 const inputClass = "eco-input";
+const contextualKangkungImage = "/assets/images/school-garden-kangkung-pots.png";
 
 export function EcoMissionPage() {
   const mission = getStudentMissionMock();
-  const latestJournal = mission.journals.at(-1);
+  const [journals, setJournals] = useMockStorage<JournalEntry[]>("ecoGrow-student-journals", mission.journals);
+  const latestJournal = journals.find((journal) => journal.id.startsWith("student-journal-")) ?? journals.at(-1);
+  const hasSubmittedToday = journals.some((journal) => journal.id.startsWith("student-journal-"));
   const fileUrlRef = useRef<string | null>(null);
-  const [status, setStatus] = useState<"in_progress" | "waiting_feedback">("in_progress");
+  const [status, setStatus] = useState<"in_progress" | "waiting_feedback">(
+    hasSubmittedToday ? "waiting_feedback" : "in_progress",
+  );
   const [notice, setNotice] = useState<Notice | null>(null);
   const [efforts, setEfforts] = useState<string[]>([]);
   const [form, setForm] = useState({
     height: String(latestJournal?.plantHeightCm ?? 29),
     condition: (latestJournal?.condition ?? "sehat") as JournalEntry["condition"],
-    note: "",
-    photoUrl: latestJournal?.photoUrl ?? "",
+    note: latestJournal?.id.startsWith("student-journal-") ? latestJournal.note : "",
+    photoUrl: latestJournal?.photoUrl ?? contextualKangkungImage,
   });
 
   useEffect(() => {
@@ -45,6 +51,20 @@ export function EcoMissionPage() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    setStatus(hasSubmittedToday ? "waiting_feedback" : "in_progress");
+  }, [hasSubmittedToday]);
+
+  useEffect(() => {
+    if (!latestJournal?.id.startsWith("student-journal-")) return;
+    setForm({
+      height: String(latestJournal.plantHeightCm),
+      condition: latestJournal.condition,
+      note: latestJournal.note,
+      photoUrl: latestJournal.photoUrl ?? contextualKangkungImage,
+    });
+  }, [latestJournal?.id]);
 
   const handlePhotoChange = (file?: File) => {
     if (!file) return;
@@ -65,6 +85,22 @@ export function EcoMissionPage() {
     }
 
     setStatus("waiting_feedback");
+    const submittedPhotoUrl = form.photoUrl.startsWith("blob:") ? contextualKangkungImage : form.photoUrl;
+    const nextJournal: JournalEntry = {
+      id: `student-journal-${Date.now()}`,
+      studentId: "siswa-1",
+      projectId: mission.activeProject.id,
+      date: "Hari ini",
+      plantHeightCm: Number(form.height) || 0,
+      leafCount: latestJournal?.leafCount ?? 15,
+      condition: form.condition,
+      weather: latestJournal?.weather ?? "cerah",
+      waterMl: latestJournal?.waterMl ?? 210,
+      note: form.note.trim(),
+      photoUrl: submittedPhotoUrl || contextualKangkungImage,
+    };
+    setJournals([nextJournal, ...journals]);
+    setForm((current) => ({ ...current, photoUrl: nextJournal.photoUrl ?? contextualKangkungImage }));
     setNotice({
       tone: "success",
       title: "Hebat, jurnal hari ini sudah tersimpan.",
@@ -197,9 +233,9 @@ export function EcoMissionPage() {
               />
             </label>
             <MockUploadBox
-              previewUrl={form.photoUrl}
+              previewUrl={form.photoUrl || contextualKangkungImage}
               title="Foto tanamanmu"
-              description="Pilih foto tanaman agar Bu Guru dapat melihat perkembangannya."
+              description="Pilih foto kangkung di kebun kelasmu agar Bu Guru dapat melihat perkembangannya."
             />
             {notice ? (
               <FriendlyAlert

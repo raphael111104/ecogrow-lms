@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Award, Camera, Sparkles, Trophy } from "lucide-react";
 import { FriendlyAlert } from "@/components/shared/FriendlyAlert";
@@ -21,26 +21,48 @@ const categoryLabel = {
   laporan_proyek: "Laporan proyek",
 };
 
+const contextualKangkungImage = "/assets/images/school-garden-kangkung-pots.png";
+const normalizeGalleryImage = (imageUrl: string) =>
+  imageUrl.includes("ecogrow-concept-board") || imageUrl.includes("hydroponic-water-spinach")
+    ? contextualKangkungImage
+    : imageUrl;
+
 export function StudentGalleryPage() {
+  const fileUrlRef = useRef<string | null>(null);
   const [posts, setPosts] = useMockStorage<GalleryPost[]>("ecoGrow-exhibition-gallery", galleryPosts);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
-    title: "Poster Siklus Hidup Kangkung",
-    description: "Tanaman tumbuh sehat jika mendapat air, cahaya, dan perawatan yang teratur.",
+    title: "Foto Kangkung di Pot Kebun Kelas",
+    description: "Daun kangkung tumbuh hijau setelah pot disiram teratur dan mendapat cahaya cukup.",
     supportingData: "Tinggi 31 cm, 16 daun, foto hari ke-1 sampai ke-10.",
-    imageUrl: "/assets/images/ecogrow-concept-board.webp",
-    category: "poster" as GalleryCategory,
+    imageUrl: contextualKangkungImage,
+    category: "foto_tanaman" as GalleryCategory,
     badgeCandidate: "Eco Exhibitor",
   });
-  const published = posts.filter((post) => post.moderationStatus === "approved");
-  const featured = published.filter((post) => post.isFeatured);
-  const ownWork = posts.find((post) => post.studentId === "siswa-1");
+  const displayPosts = posts.map((post) => ({ ...post, imageUrl: normalizeGalleryImage(post.imageUrl) }));
+  const publishedDisplay = displayPosts.filter((post) => post.moderationStatus === "approved");
+  const featuredDisplay = publishedDisplay.filter((post) => post.isFeatured);
+  const ownWork = displayPosts.find((post) => post.studentId === "siswa-1");
 
   const updateForm = (field: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
+  useEffect(() => {
+    return () => {
+      if (fileUrlRef.current) URL.revokeObjectURL(fileUrlRef.current);
+    };
+  }, []);
+
+  const handleImageChange = (file?: File) => {
+    if (!file) return;
+    if (fileUrlRef.current) URL.revokeObjectURL(fileUrlRef.current);
+    fileUrlRef.current = URL.createObjectURL(file);
+    setForm((current) => ({ ...current, imageUrl: fileUrlRef.current ?? contextualKangkungImage }));
+  };
+
   const submitWork = () => {
+    const stableImageUrl = form.imageUrl.startsWith("blob:") ? contextualKangkungImage : form.imageUrl;
     const nextPost: GalleryPost = {
       id: `student-gallery-${Date.now()}`,
       studentId: "siswa-1",
@@ -48,7 +70,7 @@ export function StudentGalleryPage() {
       title: form.title,
       description: form.description,
       supportingData: form.supportingData,
-      imageUrl: form.imageUrl,
+      imageUrl: normalizeGalleryImage(stableImageUrl),
       createdAt: "2026-05-30",
       likes: 0,
       moderationStatus: "pending",
@@ -103,7 +125,7 @@ export function StudentGalleryPage() {
           {ownWork ? (
             <div className="rounded-[1.3rem] border border-white/15 bg-white/10 p-3">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white/5">
-                <Image src={ownWork.imageUrl} alt={ownWork.title} fill className="object-cover" />
+                <Image src={ownWork.imageUrl} alt={ownWork.title} fill sizes="(min-width: 1024px) 32vw, 100vw" className="object-cover" />
               </div>
               <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-sun">Karyaku</p>
               <p className="mt-1 font-heading text-xl font-black text-white">{ownWork.title}</p>
@@ -139,14 +161,19 @@ export function StudentGalleryPage() {
                 <input className="eco-input" value={form.supportingData} onChange={(event) => updateForm("supportingData", event.target.value)} />
               </label>
               <label className="block space-y-2 text-sm font-extrabold text-mutedText md:col-span-2">
-                URL gambar mock
-                <input className="eco-input" value={form.imageUrl} onChange={(event) => updateForm("imageUrl", event.target.value)} />
+                Foto karya
+                <input
+                  className="eco-input py-3"
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleImageChange(event.target.files?.[0])}
+                />
               </label>
             </div>
           </div>
           <div className="rounded-2xl bg-white p-4">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-leaf-50">
-              <Image src={form.imageUrl} alt={`Preview ${form.title}`} fill className="object-cover" />
+              <img src={form.imageUrl} alt={`Preview ${form.title}`} className="h-full w-full object-cover" />
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               <StatusBadge status={submitted ? "waiting_feedback" : "draft"} label={submitted ? "Menunggu review guru" : "Draft karya"} />
@@ -166,14 +193,14 @@ export function StudentGalleryPage() {
             <h2 className="mt-2 font-heading text-3xl font-black text-leaf-700">Dipilih untuk dipamerkan</h2>
           </div>
           <EcoBadge className="bg-sun/25 text-earth" icon={<Trophy className="size-4" />}>
-            {featured.length} karya pilihan
+            {featuredDisplay.length} karya pilihan
           </EcoBadge>
         </div>
         <div className="mt-5 grid gap-5 md:grid-cols-2">
-          {featured.map((post) => (
+          {featuredDisplay.map((post) => (
             <EcoCard key={post.id} tone="cream" className="p-4">
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-leaf-50">
-                <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+                <Image src={post.imageUrl} alt={post.title} fill sizes="(min-width: 768px) 44vw, 100vw" className="object-cover" />
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <EcoBadge className="bg-white text-earth">{categoryLabel[post.category ?? "foto_tanaman"]}</EcoBadge>
@@ -195,10 +222,10 @@ export function StudentGalleryPage() {
         <p className="text-xs font-black uppercase tracking-[0.16em] text-leaf-500">Galeri Pameran</p>
         <h2 className="mt-2 font-heading text-2xl font-black text-leaf-700">Karya yang sudah tayang</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {published.map((post) => (
+          {publishedDisplay.map((post) => (
             <article key={post.id} className="rounded-2xl bg-leaf-50 p-3">
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+                <Image src={post.imageUrl} alt={post.title} fill sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 100vw" className="object-cover" />
               </div>
               <p className="mt-3 text-xs font-black uppercase tracking-[0.14em] text-earth">
                 {categoryLabel[post.category ?? "foto_tanaman"]}
