@@ -15,6 +15,14 @@ test("EcoMission persists submitted journals and reuses contextual kangkung evid
   assert.match(missionSource, /setJournals\(\[nextJournal, \.\.\.journals\]\)/);
 });
 
+test("EcoMission journal form keeps icon spacing and uses a styled condition list", () => {
+  assert.match(missionSource, /pl-14/);
+  assert.match(missionSource, /conditionMenuOpen/);
+  assert.match(missionSource, /role="listbox"/);
+  assert.match(missionSource, /aria-selected/);
+  assert.doesNotMatch(missionSource, /<select[\s\S]*Kondisi daun/);
+});
+
 test("EcoPlay exposes all five game cards as playable mini games", () => {
   assert.match(ecoPlaySource, /food-chain/);
   assert.match(ecoPlaySource, /plant-parts/);

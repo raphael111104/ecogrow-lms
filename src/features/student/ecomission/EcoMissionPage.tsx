@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, HelpCircle, Ruler, Send, Sprout } from "lucide-react";
+import { Camera, Check, ChevronDown, HelpCircle, Ruler, Send, Sprout } from "lucide-react";
 import { EcoGrowJourneyStepper } from "@/components/student/EcoGrowJourneyStepper";
 import { EffortCheckCard } from "@/components/student/EffortCheckCard";
 import { FriendlyAlert } from "@/components/shared/FriendlyAlert";
@@ -25,6 +25,12 @@ type Notice = {
 
 const inputClass = "eco-input";
 const contextualKangkungImage = "/assets/images/school-garden-kangkung-pots.png";
+const leafConditionOptions: Array<{ value: JournalEntry["condition"]; label: string; helper: string }> = [
+  { value: "sehat", label: "Hijau dan sehat", helper: "Daun segar, warna hijau merata." },
+  { value: "layu", label: "Agak layu", helper: "Daun mulai turun atau kurang segar." },
+  { value: "kuning", label: "Ada daun kuning", helper: "Ada perubahan warna yang perlu dicatat." },
+  { value: "perlu_perawatan", label: "Butuh bantuan", helper: "Minta guru membantu cek tanaman." },
+];
 
 export function EcoMissionPage() {
   const mission = getStudentMissionMock();
@@ -32,6 +38,8 @@ export function EcoMissionPage() {
   const latestJournal = journals.find((journal) => journal.id.startsWith("student-journal-")) ?? journals.at(-1);
   const hasSubmittedToday = journals.some((journal) => journal.id.startsWith("student-journal-"));
   const fileUrlRef = useRef<string | null>(null);
+  const conditionMenuRef = useRef<HTMLDivElement | null>(null);
+  const [conditionMenuOpen, setConditionMenuOpen] = useState(false);
   const [status, setStatus] = useState<"in_progress" | "waiting_feedback">(
     hasSubmittedToday ? "waiting_feedback" : "in_progress",
   );
@@ -65,6 +73,17 @@ export function EcoMissionPage() {
       photoUrl: latestJournal.photoUrl ?? contextualKangkungImage,
     });
   }, [latestJournal?.id]);
+
+  useEffect(() => {
+    if (!conditionMenuOpen) return;
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!conditionMenuRef.current?.contains(event.target as Node)) {
+        setConditionMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, [conditionMenuOpen]);
 
   const handlePhotoChange = (file?: File) => {
     if (!file) return;
@@ -118,6 +137,8 @@ export function EcoMissionPage() {
   const toggleEffort = (effort: string) => {
     setEfforts((current) => (current.includes(effort) ? current.filter((item) => item !== effort) : [...current, effort]));
   };
+  const selectedCondition =
+    leafConditionOptions.find((option) => option.value === form.condition) ?? leafConditionOptions[0];
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -184,9 +205,11 @@ export function EcoMissionPage() {
               <label className="space-y-2 text-sm font-extrabold text-mutedText">
                 Tinggi tanaman (cm)
                 <span className="relative block">
-                  <Ruler className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-leaf-500" aria-hidden="true" />
+                  <span className="pointer-events-none absolute left-3.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-xl bg-leaf-50 text-leaf-600">
+                    <Ruler className="size-4" aria-hidden="true" />
+                  </span>
                   <input
-                    className={`${inputClass} pl-10`}
+                    className={`${inputClass} h-12 pl-14 pr-4 text-base [appearance:textfield]`}
                     type="number"
                     min={0}
                     required
@@ -195,22 +218,59 @@ export function EcoMissionPage() {
                   />
                 </span>
               </label>
-              <label className="space-y-2 text-sm font-extrabold text-mutedText">
-                Kondisi daun
-                <select
-                  className={inputClass}
-                  value={form.condition}
-                  onChange={(event) => setForm((current) => ({
-                    ...current,
-                    condition: event.target.value as JournalEntry["condition"],
-                  }))}
+              <div ref={conditionMenuRef} className="relative space-y-2 text-sm font-extrabold text-mutedText">
+                <span>Kondisi daun</span>
+                <button
+                  type="button"
+                  className="flex h-12 w-full items-center justify-between gap-3 rounded-2xl border border-gardenBorder bg-white/95 px-4 text-left font-extrabold text-slateText shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] outline-none transition hover:border-leaf-300 focus:border-leaf-500/50 focus:ring-4 focus:ring-sun/25"
+                  aria-haspopup="listbox"
+                  aria-expanded={conditionMenuOpen}
+                  onClick={() => setConditionMenuOpen((open) => !open)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") setConditionMenuOpen(false);
+                  }}
                 >
-                  <option value="sehat">Hijau dan sehat</option>
-                  <option value="layu">Agak layu</option>
-                  <option value="kuning">Ada daun kuning</option>
-                  <option value="perlu_perawatan">Butuh bantuan</option>
-                </select>
-              </label>
+                  <span className="min-w-0 truncate">{selectedCondition.label}</span>
+                  <ChevronDown
+                    className={`size-4 shrink-0 text-leaf-600 transition-transform ${conditionMenuOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {conditionMenuOpen ? (
+                  <div
+                    className="absolute left-0 right-0 top-full z-30 mt-2 rounded-2xl border border-gardenBorder bg-white p-2 shadow-[0_18px_48px_rgba(15,82,44,0.18)]"
+                    role="listbox"
+                    aria-label="Pilih kondisi daun"
+                  >
+                    {leafConditionOptions.map((option) => {
+                      const selected = option.value === form.condition;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          role="option"
+                          aria-selected={selected}
+                          className={`flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition ${
+                            selected ? "bg-leaf-50 text-leaf-700" : "text-slateText hover:bg-cream"
+                          }`}
+                          onClick={() => {
+                            setForm((current) => ({ ...current, condition: option.value }));
+                            setConditionMenuOpen(false);
+                          }}
+                        >
+                          <span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${selected ? "bg-leaf-600 text-white" : "bg-leaf-100 text-leaf-500"}`}>
+                            {selected ? <Check className="size-3.5" aria-hidden="true" /> : null}
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block font-heading text-sm font-black">{option.label}</span>
+                            <span className="mt-0.5 block text-xs font-semibold leading-5 text-mutedText">{option.helper}</span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
             </div>
             <label className="block space-y-2 text-sm font-extrabold text-mutedText">
               Catatan singkat
